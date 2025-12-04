@@ -1,7 +1,7 @@
-import { Component, signal } from '@angular/core';
+import { Component } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
-import { Footer } from '@shared/components/footer/footer';
 import { Navbar } from '@shared/components/navbar/navbar';
+import { Footer } from '@shared/components/footer/footer';
 
 @Component({
   selector: 'app-root',
@@ -10,5 +10,8 @@ import { Navbar } from '@shared/components/navbar/navbar';
   styleUrl: './app.css'
 })
 export class App {
-  protected readonly title = signal('ArtisanArt-frontend');
+  // Navigation Handler
+  navigateTo(page: string): void {
+    console.log('Navigation vers:', page);
+  }
 }
