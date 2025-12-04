@@ -1,0 +1,150 @@
+<footer class="mt-auto relative border-t border-slate-700/50">
+  <!-- Gradient overlay -->
+  <div class="footer-gradient"></div>
+
+  <div class="footer-content">
+    <div class="footer-grid">
+      <!-- Brand Section -->
+      <div class="lg:col-span-1">
+        <div class="brand-logo" (click)="onNavigate('catalogue')">
+          <div class="brand-icon-wrapper">
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              class="brand-icon"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M19 17h2c.6 0 1-.4 1-1v-3c0-.9-.7-1.7-1.5-1.9C18.7 10.6 16 10 16 10s-1.3-1.4-2.2-2.3c-.5-.4-1.1-.7-1.8-.7H5c-.6 0-1.1.4-1.4.9l-1.4 2.9A3.7 3.7 0 0 0 2 12v4c0 .6.4 1 1 1h2"
+              />
+              <circle cx="7" cy="17" r="2" />
+              <path d="M9 17h6" />
+              <circle cx="17" cy="17" r="2" />
+            </svg>
+          </div>
+          <div class="brand-text">
+            <span class="brand-name">AutoVisionTech</span>
+            <span class="brand-tagline">Premium Cars</span>
+          </div>
+        </div>
+
+        <p class="text-slate-400 text-sm leading-relaxed mb-6">
+          Your trusted partner for premium and luxury vehicles. Discover excellence in every drive.
+        </p>
+
+        <!-- Social Media -->
+        <div class="flex items-center gap-3">
+          <a
+            *ngFor="let social of socialLinks"
+            [href]="social.url"
+            target="_blank"
+            class="social-link"
+            [attr.aria-label]="social.ariaLabel"
+          >
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                [attr.d]="getSocialIcon(social.icon)"
+              />
+            </svg>
+          </a>
+        </div>
+      </div>
+
+      <!-- Quick Links -->
+      <div>
+        <h4 class="footer-heading">Quick Links</h4>
+        <ul class="space-y-3">
+          <li *ngFor="let link of quickLinks">
+            <button
+              *ngIf="link.action; else externalLink"
+              (click)="onNavigate(link.action)"
+              class="footer-link"
+            >
+              {{ link.label }}
+            </button>
+            <ng-template #externalLink>
+              <a [href]="link.href" class="footer-link">
+                {{ link.label }}
+              </a>
+            </ng-template>
+          </li>
+        </ul>
+      </div>
+
+      <!-- Support -->
+      <div>
+        <h4 class="footer-heading">Support</h4>
+        <ul class="space-y-3">
+          <li *ngFor="let link of supportLinks">
+            <a [href]="link.href" class="footer-link">
+              {{ link.label }}
+            </a>
+          </li>
+        </ul>
+      </div>
+
+      <!-- Contact Info -->
+      <div>
+        <h4 class="footer-heading">Contact Us</h4>
+        <ul class="space-y-4">
+          <li *ngFor="let contact of contactInfo" class="contact-item">
+            <div class="p-2 rounded-lg mt-0.5" [ngClass]="contact.bgColor">
+              <svg
+                class="w-4 h-4"
+                [ngClass]="contact.iconColor"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  [attr.d]="getContactIcon(contact.icon)"
+                />
+              </svg>
+            </div>
+            <div>
+              <a *ngIf="contact.link; else plainText" [href]="contact.link" class="text-sm text-slate-400 hover:text-white transition-colors">
+                {{ contact.content }}
+              </a>
+              <ng-template #plainText>
+                <p class="text-sm text-slate-400" [innerHTML]="contact.content.replace(', ', '<br>')"></p>
+              </ng-template>
+            </div>
+          </li>
+        </ul>
+
+        <!-- Business Hours -->
+        <div class="business-hours">
+          <p class="business-hours-label">Business Hours</p>
+          <p *ngFor="let schedule of businessHours" class="business-hours-time">
+            {{ schedule.days }}: {{ schedule.hours }}
+          </p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Bottom Bar -->
+    <div class="footer-bottom">
+      <div class="footer-bottom-content">
+        <p class="text-sm text-slate-500">© {{ currentYear }} AutoVisionTech. All rights reserved.</p>
+        <div class="flex items-center gap-6">
+          <a *ngFor="let link of bottomLinks" href="#" class="text-sm text-slate-500 hover:text-white transition-colors">
+            {{ link }}
+          </a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Decorative bottom gradient -->
+  <div class="h-1" style="background: linear-gradient(to right, #2563eb, #06b6d4, #2563eb)"></div>
+</footer>
