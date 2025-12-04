@@ -1,8 +1,10 @@
+@tailwind utilities;
+@import "tailwindcss";
+
 .nav-container {
-  position: relative;
-  z-index: 50;
-  padding-left: 20px;
-  padding-right: 20px;
+  @apply sticky top-0 z-50 px-5;
+  @apply backdrop-blur-xl bg-slate-900/80;
+  @apply border-b border-slate-700/50 shadow-lg;
 }
 
 .mobile-menu {
