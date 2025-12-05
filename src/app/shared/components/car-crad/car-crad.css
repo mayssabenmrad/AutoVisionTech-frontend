@@ -4,6 +4,7 @@
 /* Car Card Styles */
 .car-card {
   @apply w-100 backdrop-blur-xl bg-gradient-to-br from-slate-800/80 to-slate-800/60 rounded-3xl overflow-hidden border border-slate-700/50 hover:border-blue-500/50 transition-all duration-500 shadow-xl hover:shadow-blue-500/20;
+  @apply cursor-pointer;
 }
 
 .car-img {

@@ -142,6 +142,6 @@ button:active {
 }
 
 .brand-logo {
-  @apply flex justify-center items-center gap-3 mb-6 cursor-pointer;
+  @apply flex justify-start items-center gap-3 mb-6 cursor-pointer;
 }
 
