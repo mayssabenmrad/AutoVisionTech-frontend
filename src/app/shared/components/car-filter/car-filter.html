@@ -1,0 +1,159 @@
+<div class="search-filter-container">
+  <!-- Principal search bar -->
+  <div class="search-bar-wrapper">
+    <div class="search-input-group">
+      <!-- Search icon -->
+      <svg class="search-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/></svg>
+      
+      <!-- Search input -->
+      <input
+        type="text"
+        [(ngModel)]="searchText"
+        (ngModelChange)="onSearchChange()"
+        placeholder="Search by brand, model, or description..."
+        class="search-input"
+      />
+      
+      <!-- Clear button -->
+      <button
+        *ngIf="searchText"
+        (click)="searchText = ''; onSearchChange()"
+        class="clear-btn"
+        type="button"
+        aria-label="Clear search"
+      >
+        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
+      </button>
+    </div>
+
+    <!-- Advanced filters button -->
+    <button (click)="toggleFilters()" class="filter-toggle-btn" type="button">
+      <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 4a1 1 0 011-1h16a1 1 0 011 1v2.586a1 1 0 01-.293.707l-6.414 6.414a1 1 0 00-.293.707V17l-4 4v-6.586a1 1 0 00-.293-.707L3.293 7.293A1 1 0 013 6.586V4z"/></svg>
+      <span>Filters</span>
+      <span *ngIf="showFilters" class="filter-indicator"></span>
+    </button>
+  </div>
+
+  <!-- Advanced filters panel -->
+  <div *ngIf="showFilters" class="filters-panel">
+    <div class="filters-grid">
+      
+      <!-- Price section -->
+      <div class="filter-section">
+        <h3 class="filter-title">
+          <svg class="w-4 h-4 text-yellow-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><line x1="12" x2="12" y1="2" y2="22" stroke-width="2"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
+          Price Range
+        </h3>
+        
+        <!-- Quick price filters -->
+        <div class="quick-filters">
+          <button
+            *ngFor="let filter of quickPriceFilters"
+            (click)="setQuickPriceFilter(filter.min, filter.max)"
+            class="quick-filter-btn"
+            type="button"
+            [class.active]="minPrice === filter.min && maxPrice === filter.max"
+          >
+            {{ filter.label }}
+          </button>
+        </div>
+
+        <!-- Price inputs -->
+        <div class="price-inputs">
+          <div class="price-input-group">
+            <label class="price-label">Min</label>
+            <div class="price-input-wrapper">
+              <span class="currency-symbol">$</span>
+              <input
+                type="number"
+                [(ngModel)]="minPrice"
+                (ngModelChange)="onPriceChange()"
+                min="0"
+                max="100000"
+                [max]="maxPrice"
+                class="price-input"
+              />
+            </div>
+          </div>
+          
+          <div class="price-separator">—</div>
+          
+          <div class="price-input-group">
+            <label class="price-label">Max</label>
+            <div class="price-input-wrapper">
+              <span class="currency-symbol">$</span>
+              <input
+                type="number"
+                [(ngModel)]="maxPrice"
+                (ngModelChange)="onPriceChange()"
+                min="0"
+                max="100000"
+                class="price-input"
+              />
+            </div>
+          </div>
+        </div>
+
+        <!-- Range sliders visuals -->
+        <div class="range-sliders">
+          <div class="range-track"></div>
+          <input
+            type="range"
+            [(ngModel)]="minPrice"
+            (ngModelChange)="onPriceChange()"
+            min="0"
+            [max]="maxPrice"
+            step="1000"
+            class="range-slider min-slider"
+          />
+          <input
+            type="range"
+            [(ngModel)]="maxPrice"
+            (ngModelChange)="onPriceChange()"
+            max="100000"
+            step="1000"
+            class="range-slider max-slider"
+          />
+        </div>
+      </div>
+
+      <!-- Sort section -->
+      <div class="filter-section">
+        <h3 class="filter-title">
+          <svg class="w-4 h-4 text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 4h13M3 8h9m-9 4h6m4 0l4-4m0 0l4 4m-4-4v12"/></svg>
+          Sort By
+        </h3>
+        
+        <div class="sort-options">
+          <button
+            *ngFor="let option of sortOptions"
+            (click)="sortBy = option.value; onSortChange()"
+            class="sort-option-btn"
+            type="button"
+            [class.active]="sortBy === option.value"
+          >
+            <span class="sort-radio" [class.checked]="sortBy === option.value"></span>
+            <span>{{ option.label }}</span>
+            
+            <!-- Sort icons -->
+            <svg *ngIf="option.value.includes('asc') && sortBy === option.value" class="sort-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 15l7-7 7 7"/></svg>
+            <svg *ngIf="option.value.includes('desc') && sortBy === option.value" class="sort-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Actions -->
+    <div class="filter-actions">
+      <button (click)="resetFilters()" class="default-btn px-6 py-3 w-1/2" type="button">
+        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"/></svg>
+        Reset All Filters
+      </button>
+      
+      <button (click)="toggleFilters()" class="btn-active px-6 py-3 w-1/2" type="button">
+        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>
+        Apply Filters
+      </button>
+    </div>
+  </div>
+</div>
