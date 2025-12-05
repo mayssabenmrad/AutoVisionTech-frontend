@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { CarCrad } from '../car-crad/car-crad';
+import { CarCrad } from '../../shared/components/car-crad/car-crad';
 
 @Component({
   selector: 'app-main-page',
@@ -7,6 +7,4 @@ import { CarCrad } from '../car-crad/car-crad';
   templateUrl: './main-page.html',
   styleUrl: './main-page.css',
 })
-export class MainPage {
-
-}
+export class MainPage {}
