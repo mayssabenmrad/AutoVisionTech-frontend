@@ -16,6 +16,7 @@
   --shadow-card: 0 8px 32px rgba(0, 0, 0, 0.6);
   --shadow-card-hover: 0 16px 48px rgba(37, 99, 235, 0.3);
   --shadow-button-active: 0 0 30px rgba(37, 99, 235, 0.4);
+  --border-radius: 1.5rem;
 }
 
 * {
@@ -96,8 +97,8 @@ button:active {
 }
 
 .btn-active {
-  @apply bg-gradient-to-r from-blue-600 to-cyan-600 text-white;
-  box-shadow: var(--shadow-button-active);
+  @apply bg-gradient-to-r from-blue-600 to-cyan-600 text-white rounded-xl;
+  @apply hover:shadow-(--shadow-glow-blue);
 }
 
 .btn-logout {
@@ -106,6 +107,10 @@ button:active {
 
 .btn-logout:hover {
   box-shadow: 0 0 30px rgba(239, 68, 68, 0.4);
+}
+
+.default-btn {
+  @apply bg-slate-700/50 hover:bg-slate-600/50 text-white rounded-xl transition-all duration-300 backdrop-blur-sm border border-slate-600/50 hover:border-slate-500;
 }
 
 /* Brand Section */

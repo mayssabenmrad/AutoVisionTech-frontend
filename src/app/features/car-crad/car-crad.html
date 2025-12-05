@@ -1,0 +1,101 @@
+<div class="car-card group">
+
+  <!-- Image -->
+  <div class="relative h-64 overflow-hidden">
+    <div class="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent z-10"></div>
+
+    <img
+      src="https://images.pexels.com/photos/358070/pexels-photo-358070.jpeg"
+      alt="Car Image"
+      class="car-img"
+    />
+
+    <!-- Status Badge -->
+    <div class="absolute top-5 right-5 z-20">
+      <span class="status-badge available-badge">
+        available
+      </span>
+    </div>
+
+    <!-- Price Badge -->
+    <div class="absolute bottom-5 left-5 z-20">
+      <div class="flex items-center gap-2 px-4 py-2 backdrop-blur-xl bg-black/40 rounded-full border border-white/10">
+        <!-- Dollar Icon -->
+        <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 text-yellow-400" fill="none" viewBox="0 0 24 24" stroke="currentColor"><line x1="12" x2="12" y1="2" y2="22"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
+        <span class="text-white font-semibold">$25,000</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Content -->
+  <div class="p-7">
+
+    <!-- Brand & Model -->
+    <div class="mb-5">
+      <h3 class="mb-2 text-white text-lg font-semibold group-hover:text-blue-400 transition-colors">
+        BMW M4
+      </h3>
+      <p class="text-sm text-slate-400 line-clamp-2 leading-relaxed">
+        A high-performance coupe with an aggressive design and great handling.
+      </p>
+    </div>
+
+    <!-- Details Grid -->
+    <div class="details-grid">
+
+      <!-- Year -->
+      <div class="details-item">
+        <div class="p-2 rounded-lg bg-blue-500/10">
+          <!-- Calendar Icon -->
+          <svg class="w-4 h-4 text-blue-400" fill="none" xmlns="http://www.w3.org/2000/svg" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-width="2" stroke-linejoin="round" d="M8 7V3m8 4V3M3 11h18M5 5h14a2 2 0 012 2v12a2 2 0 01-2 2H5a2 2 0 01-2-2V7a2 2 0 012-2z"/>
+          </svg>
+        </div>
+        <div>
+          <span class="text-xs text-slate-500">Year</span>
+          <p class="text-sm text-slate-300 font-medium">2021</p>
+        </div>
+      </div>
+
+      <!-- Mileage -->
+      <div class="details-item">
+        <div class="p-2 rounded-lg bg-cyan-500/10">
+          <!-- Gauge Icon -->
+          <svg class="w-4 h-4 text-cyan-400" fill="none" xmlns="http://www.w3.org/2000/svg" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-width="2" stroke-linejoin="round" d="m12 14 4-4"/><path d="M3.34 19a10 10 0 1 1 17.32 0"/></svg>
+        </div>
+        <div>
+          <span class="text-xs text-slate-500">Mileage</span>
+          <p class="text-sm text-slate-300 font-medium">29,500 km</p>
+        </div>
+      </div>
+
+      <!-- Condition -->
+      <div class="details-item">
+        <div class="p-2 rounded-lg bg-green-500/10">
+          <!-- Tag Icon -->
+          <svg class="w-4 h-4 text-green-400" fill="none" xmlns="http://www.w3.org/2000/svg" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-width="2" stroke-linejoin="round" d="M12.586 2.586A2 2 0 0 0 11.172 2H4a2 2 0 0 0-2 2v7.172a2 2 0 0 0 .586 1.414l8.704 8.704a2.426 2.426 0 0 0 3.42 0l6.58-6.58a2.426 2.426 0 0 0 0-3.42z"/><circle cx="7.5" cy="7.5" r=".5" fill="currentColor"/></svg>
+        </div>
+        <div>
+          <span class="text-xs text-slate-500">Condition</span>
+          <p class="text-sm text-slate-300 font-medium">Excellent</p>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- Actions -->
+    <div class="flex gap-3">
+      
+      <!-- View Details -->
+      <button class="default-btn flex-1 px-5 py-3 ">
+        View Details
+      </button>
+
+      <!-- Book Now -->
+      <button class="btn-active flex-1 px-5 py-3 ">
+        Book Now
+      </button>
+
+    </div>
+  </div>
+</div>
