@@ -1,0 +1,75 @@
+/* Fade-in + slide-up */
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.fade-in-up {
+  animation: fadeInUp 0.8s ease-out both;
+}
+
+/* Delays for text */
+.fade-delay-1 {
+  animation: fadeInUp 0.9s ease-out both;
+  animation-delay: 0.2s;
+}
+
+.fade-delay-2 {
+  animation: fadeInUp 1s ease-out both;
+  animation-delay: 0.35s;
+}
+
+/* Glow pulse for the icon */
+@keyframes glowPulse {
+  0% {
+    box-shadow: 0 0 20px rgba(59,130,246,0.2),
+                0 0 40px rgba(6,182,212,0.15);
+    transform: scale(1);
+  }
+  50% {
+    box-shadow: 0 0 30px rgba(59,130,246,0.35),
+                0 0 60px rgba(6,182,212,0.25);
+    transform: scale(1.05);
+  }
+  100% {
+    box-shadow: 0 0 20px rgba(59,130,246,0.2),
+                0 0 40px rgba(6,182,212,0.15);
+    transform: scale(1);
+  }
+}
+
+.glow-pulse {
+  border-radius: 1.5rem;
+  animation: glowPulse 2.4s ease-in-out infinite;
+}
+
+/* Hero layout */
+.hero {
+  position: relative;
+  overflow: hidden;
+  height: auto;
+}
+
+.hero_backdrop {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    135deg,
+    rgba(96,165,250,0.10),
+    rgba(6,182,212,0.06) 50%,
+    transparent
+  );
+}
+
+.hero_container {
+  max-width: 1120px;
+  margin: 0 auto;
+  padding-top: 1rem;
+  text-align: center;
+}

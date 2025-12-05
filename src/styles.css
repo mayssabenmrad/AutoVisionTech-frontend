@@ -128,7 +128,7 @@ button:active {
 }
 
 .brand-icon {
-  @apply w-6 h-6 text-white;
+  @apply text-white;
 }
 
 .brand-icon-wrapper {
@@ -142,6 +142,6 @@ button:active {
 }
 
 .brand-logo {
-  @apply flex items-center gap-3 mb-6 cursor-pointer;
+  @apply flex justify-center items-center gap-3 mb-6 cursor-pointer;
 }
 
