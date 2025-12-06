@@ -1,10 +1,11 @@
 import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { RouterLink } from '@angular/router';
 
 @Component({
   selector: 'app-navbar',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, RouterLink],
   templateUrl: './navbar.html',
   styleUrls: ['./navbar.css']
 })
@@ -23,17 +24,8 @@ export class Navbar {
     this.mobileMenuOpen = !this.mobileMenuOpen;
   }
 
-  // Navigation Handler
-  navigateTo(page: string): void {
-    this.currentPage = page;
-    this.mobileMenuOpen = false;
-    console.log('Navigating to:', page);
-  }
-
-  // Sign Out Handler
   signOut(): void {
-    console.log('Signing out...');
-    this.mobileMenuOpen = false;
+    // Sign out logic here
   }
 
   // Check Active Page
