@@ -6,7 +6,6 @@ import { Router } from '@angular/router';
 export interface SignupFormData {
   fullName: string;
   email: string;
-  phone: string;
   password: string;
   confirmPassword: string;
   role: 'admin' | 'agent';
@@ -27,7 +26,6 @@ export class Signup {
   signupForm: SignupFormData = {
     fullName: '',
     email: '',
-    phone: '',
     password: '',
     confirmPassword: '',
     role: 'admin',
@@ -51,7 +49,6 @@ export class Signup {
       this.signupForm.fullName.trim() &&
       this.signupForm.email.trim() &&
       this.isValidEmail(this.signupForm.email) &&
-      this.signupForm.phone.trim() &&
       this.signupForm.password.length >= 8 &&
       this.signupForm.password === this.signupForm.confirmPassword &&
       this.signupForm.agreeToTerms
