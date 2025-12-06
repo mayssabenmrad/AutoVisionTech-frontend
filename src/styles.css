@@ -147,6 +147,10 @@ button:active {
   @apply flex justify-start items-center gap-3 mb-6 cursor-pointer;
 }
 
+.brand-logo-large {
+  @apply flex justify-center items-center gap-3 mb-6;
+}
+
 /* Status Badge */
 .status-badge {
   @apply px-4 py-2 rounded-full text-xs border backdrop-blur-md font-medium capitalize;
@@ -176,4 +180,159 @@ button:active {
 
 .input:focus {
   box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1), 0 10px 30px rgba(0, 0, 0, 0.3);
+}
+
+.input-icon {
+  @apply absolute left-4 top-1/2 -translate-y-1/2 text-blue-400 pointer-events-none;
+}
+
+/* Signin and Signup Title */
+.signin-title, .signup-title {
+  @apply text-3xl md:text-4xl font-bold text-white mb-2;
+  background: linear-gradient(to right, white, #bfdbfe, #a5f3fc);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+/* Error Banner */
+.error-banner {
+  @apply flex items-center gap-3 p-4 mb-6 rounded-xl;
+  @apply bg-red-500/10 border border-red-500/30;
+  @apply text-red-400 text-sm;
+  animation: shake 0.5s ease-in-out;
+}
+
+@keyframes shake {
+  0%, 100% { transform: translateX(0); }
+  10%, 30%, 50%, 70%, 90% { transform: translateX(-5px); }
+  20%, 40%, 60%, 80% { transform: translateX(5px); }
+}
+
+.input.error {
+  @apply border-red-500/50 focus:border-red-500 focus:ring-red-500/20;
+}
+
+.error-message {
+  @apply flex items-center gap-1.5 text-xs text-red-400;
+  animation: fadeIn 0.3s ease-out;
+}
+
+/* Form Group */
+.form-group {
+  @apply space-y-2;
+}
+
+.form-label {
+  @apply flex items-center gap-2 text-sm font-medium text-slate-300;
+}
+
+.input-wrapper {
+  @apply relative;
+}
+
+.password-toggle {
+  @apply absolute right-4 top-1/2 -translate-y-1/2;
+  @apply text-slate-400 hover:text-white;
+  @apply transition-colors duration-200;
+  @apply p-1 rounded-lg hover:bg-slate-700/50;
+}
+
+/* Checkbox */
+.checkbox-custom {
+  @apply w-5 h-5 rounded border-2 border-slate-600;
+  @apply bg-slate-700/50 flex-shrink-0 mt-0.5;
+  @apply transition-all duration-200;
+  @apply relative flex items-center justify-center;
+}
+
+.checkbox-input:checked + .checkbox-custom {
+  @apply bg-gradient-to-br from-blue-600 to-cyan-600;
+  @apply border-blue-500;
+  box-shadow: 0 0 15px rgba(37, 99, 235, 0.4);
+}
+
+.checkbox-input:checked + .checkbox-custom::after {
+  content: '';
+  @apply w-2.5 h-1.5 border-2 border-white;
+  border-top: none;
+  border-right: none;
+  transform: rotate(-45deg) translateY(-1px);
+}
+
+.link {
+  @apply text-blue-400 hover:text-blue-300;
+  @apply transition-colors duration-200;
+  @apply underline decoration-blue-400/30 hover:decoration-blue-300;
+}
+
+.checkbox-text {
+  @apply text-sm text-slate-400;
+}
+
+/* Submit Button */
+.submit-btn {
+  @apply w-full py-4 rounded-xl;
+  @apply bg-gradient-to-r from-blue-600 to-cyan-600;
+  @apply text-white font-semibold;
+  @apply flex items-center justify-center gap-2;
+  @apply transition-all duration-300;
+  @apply hover:from-blue-700 hover:to-cyan-700;
+  @apply hover:shadow-[0_0_30px_rgba(37,99,235,0.4)];
+  @apply hover:-translate-y-0.5;
+  @apply active:translate-y-0;
+}
+
+.submit-btn:disabled, .submit-btn.disabled {
+  @apply opacity-50 cursor-not-allowed;
+  @apply hover:from-blue-600 hover:to-cyan-600;
+  @apply hover:shadow-none hover:translate-y-0;
+}
+
+.submit-btn.loading {
+  @apply opacity-90;
+}
+
+/* Loading Spinner */
+.spinner {
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* Signup and Signin Page Layout */
+.signup-page, .signin-page {
+  @apply min-h-screen flex items-center justify-center p-4 relative;
+}
+
+.signup-backdrop, .signin-backdrop {
+  @apply absolute inset-0 pointer-events-none;
+  background: radial-gradient(circle at 30% 20%, rgba(37, 99, 235, 0.08) 0%, transparent 50%),
+              radial-gradient(circle at 70% 80%, rgba(6, 182, 212, 0.08) 0%, transparent 50%);
+}
+
+.signup-container, .signin-container {
+  @apply relative w-full max-w-2xl;
+  @apply bg-slate-800/60 backdrop-blur-xl rounded-3xl;
+  @apply border border-slate-700/50 shadow-2xl;
+  @apply p-8 md:p-12;
+  animation: slideUp 0.6s ease-out;
+}
+
+@keyframes slideUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
