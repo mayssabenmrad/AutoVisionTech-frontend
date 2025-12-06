@@ -1,0 +1,156 @@
+<div class="w-1/2">
+  <!-- Main Image Gallery -->
+  <div class="image-gallery">
+    <div class="main-image-wrapper group">
+      <img
+        [src]="car.images[selectedImageIndex]"
+        [alt]="car.brand + ' ' + car.model"
+        class="main-image"
+      />
+      
+      <!-- Navigation Arrows -->
+      <button 
+        *ngIf="car.images.length > 1"
+        (click)="previousImage()" 
+        class="nav-arrow left-4"
+      >
+        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/>
+        </svg>
+      </button>
+      
+      <button 
+        *ngIf="car.images.length > 1"
+        (click)="nextImage()" 
+        class="nav-arrow right-4"
+      >
+        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
+        </svg>
+      </button>
+    </div>
+
+    <!-- Thumbnail Gallery -->
+    <div *ngIf="car.images.length > 1" class="thumbnail-gallery">
+      <button
+        *ngFor="let image of car.images; let i = index"
+        (click)="selectImage(i)"
+        [class.active]="selectedImageIndex === i"
+        class="thumbnail"
+      >
+        <img [src]="image" [alt]="car.brand + ' ' + car.model + ' - Image ' + (i + 1)" />
+      </button>
+    </div>
+  </div>
+
+  <!-- Car Information Card -->
+  <div class="info-card">
+    <div class="flex items-start justify-between mb-6 gap-4">
+      <div>
+        <h1 class="text-3xl font-bold text-white mb-2">
+          {{ car.brand }} {{ car.model }}
+        </h1>
+        <p class="text-slate-400 leading-relaxed">{{ car.description }}</p>
+      </div>
+      <span [ngClass]="['status-badge', getStatusColor(car.status)]">
+        {{ car.status }}
+      </span>
+    </div>
+
+    <!-- Specifications Grid -->
+    <div class="flex flex-wrap gap-4 mb-8">
+      
+      <!-- Year -->
+      <div class="spec-card">
+        <div class="spec-icon-wrapper bg-blue-500/10">
+          <svg class="spec-icon text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-width="2" stroke-linejoin="round" d="M8 7V3m8 4V3M3 11h18M5 5h14a2 2 0 012 2v12a2 2 0 01-2 2H5a2 2 0 01-2-2V7a2 2 0 012-2z"/>
+          </svg>
+        </div>
+        <div class="spec-info">
+          <span class="spec-label">Year</span>
+          <span class="spec-value">{{ car.year }}</span>
+        </div>
+      </div>
+
+      <!-- Mileage -->
+      <div class="spec-card">
+        <div class="spec-icon-wrapper bg-cyan-500/10">
+          <svg class="spec-icon text-cyan-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-width="2" stroke-linejoin="round" d="m12 14 4-4"/>
+            <path d="M3.34 19a10 10 0 1 1 17.32 0"/>
+          </svg>
+        </div>
+        <div class="spec-info">
+          <span class="spec-label">Mileage</span>
+          <span class="spec-value">{{ car.kilometerAge.toLocaleString() }} km</span>
+        </div>
+      </div>
+
+      <!-- Condition -->
+      <div class="spec-card">
+        <div class="spec-icon-wrapper bg-green-500/10">
+          <svg class="spec-icon text-green-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-width="2" stroke-linejoin="round" d="M12.586 2.586A2 2 0 0 0 11.172 2H4a2 2 0 0 0-2 2v7.172a2 2 0 0 0 .586 1.414l8.704 8.704a2.426 2.426 0 0 0 3.42 0l6.58-6.58a2.426 2.426 0 0 0 0-3.42z"/>
+            <circle cx="7.5" cy="7.5" r=".5" fill="currentColor"/>
+          </svg>
+        </div>
+        <div class="spec-info">
+          <span class="spec-label">Condition</span>
+          <span class="spec-value">{{ car.condition }}</span>
+        </div>
+      </div>
+
+      <!-- Price -->
+      <div class="spec-card spec-card-highlight">
+        <div class="spec-icon-wrapper bg-yellow-500/10">
+          <svg class="spec-icon text-yellow-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <line x1="12" x2="12" y1="2" y2="22" stroke-width="2"/>
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/>
+          </svg>
+        </div>
+        <div class="spec-info">
+          <span class="spec-label">Price</span>
+          <span class="spec-value spec-value-price">${{ car.price.toLocaleString() }}</span>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- Features Section -->
+  <div class="features-card mt-2">
+    <h2 class="section-title">
+      <svg class="w-5 h-5 text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
+      </svg>
+      Key Features
+    </h2>
+    <div class="features-grid">
+      <div class="feature-item">
+        <svg xmlns="http://www.w3.org/2000/svg" class="feature-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M20 6 9 17l-5-5"/></svg>
+        <span>Turbo Engine</span>
+      </div>
+      <div class="feature-item">
+        <svg xmlns="http://www.w3.org/2000/svg" class="feature-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M20 6 9 17l-5-5"/></svg>
+        <span>Turbo Engine</span>
+      </div>
+      <div class="feature-item">
+        <svg xmlns="http://www.w3.org/2000/svg" class="feature-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M20 6 9 17l-5-5"/></svg>
+        <span>Turbo Engine</span>
+      </div>
+      <div class="feature-item">
+        <svg xmlns="http://www.w3.org/2000/svg" class="feature-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M20 6 9 17l-5-5"/></svg>
+        <span>Turbo Engine</span>
+      </div>
+      <div class="feature-item">
+        <svg xmlns="http://www.w3.org/2000/svg" class="feature-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M20 6 9 17l-5-5"/></svg>
+        <span>Turbo Engine</span>
+      </div>
+      <div class="feature-item">
+        <svg xmlns="http://www.w3.org/2000/svg" class="feature-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M20 6 9 17l-5-5"/></svg>
+        <span>Turbo Engine</span>
+      </div>
+    </div>
+  </div>
+</div>

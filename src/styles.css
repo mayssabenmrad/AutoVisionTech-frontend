@@ -147,3 +147,33 @@ button:active {
   @apply flex justify-start items-center gap-3 mb-6 cursor-pointer;
 }
 
+/* Status Badge */
+.status-badge {
+  @apply px-4 py-2 rounded-full text-xs border backdrop-blur-md font-medium capitalize;
+}
+
+.available-badge {
+  @apply  bg-green-500/10 text-green-400 border-green-500/50 ;
+}
+
+.reserved-badge {
+  @apply bg-yellow-500/10 text-yellow-400 border-yellow-500/50;
+}
+
+.sold-badge {
+  @apply bg-red-500/10 text-red-400 border-red-500/50;
+}
+
+/* Input Styles */
+.input {
+  @apply w-full pl-12 pr-12 py-4 rounded-2xl;
+  @apply bg-slate-800/60 backdrop-blur-xl;
+  @apply border border-slate-700/50;
+  @apply text-white placeholder-slate-500;
+  @apply transition-all duration-300;
+  @apply focus:outline-none focus:border-blue-500/50 focus:ring-2 focus:ring-blue-500/20;
+}
+
+.input:focus {
+  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1), 0 10px 30px rgba(0, 0, 0, 0.3);
+}

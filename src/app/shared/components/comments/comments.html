@@ -1,0 +1,45 @@
+<div class="comments-container">
+  
+  <!-- Header -->
+  <div class="flex items-center gap-3">
+    <svg class="text-blue-400" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 17a2 2 0 0 1-2 2H6.828a2 2 0 0 0-1.414.586l-2.202 2.202A.71.71 0 0 1 2 21.286V5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2z"/></svg>
+    <h3 class="text-xl font-semibold text-white">Comments ({{ comments.length }})</h3>
+  </div>
+
+  <!-- Comment Form -->
+  <form (ngSubmit)="onSubmit()">
+    <label for="name">Your Name</label>
+    <input [(ngModel)]="commentForm.name" name="name" placeholder="Enter your name" class="input"/>
+    
+    <label for="content">Your Comment</label>
+    <textarea [(ngModel)]="commentForm.content" name="content" class="input h-24 resize-none" placeholder="Enter your comment..."></textarea>
+    
+    <button type="submit" class="btn-active h-10">
+      <svg class="w-4 h-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14.536 21.686a.5.5 0 0 0 .937-.024l6.5-19a.496.496 0 0 0-.635-.635l-19 6.5a.5.5 0 0 0-.024.937l7.93 3.18a2 2 0 0 1 1.112 1.11z"/><path d="m21.854 2.147-10.94 10.939"/></svg>
+      Submit Comment
+    </button>
+  </form>
+
+  <!-- Comments List -->
+  <div class="comments-list space-y-5">
+    <!-- Each Comment -->
+    <div *ngFor="let comment of comments">
+      <div class="flex items-center gap-3 mb-2">
+        <div class="comment-avatar">
+          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+        </div>
+        <div class="flex justify-between w-full">
+          <span>{{ comment.name }}</span>
+          <span>{{ formatDate(comment.createdAt) }}</span>
+        </div>
+      </div>
+      <p class="text-slate-300 leading-relaxed">{{ comment.content }}</p>
+    </div>
+
+    <!-- Message if no comments -->
+    <div *ngIf="comments.length === 0">
+      <p class="text-slate-300 leading-relaxed">No comments yet. Be the first to comment!</p>
+    </div>
+  </div>
+
+</div>
