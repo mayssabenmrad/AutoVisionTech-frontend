@@ -9,10 +9,12 @@ import { CarDetails } from '@shared/components/car-details/car-details';
 import { Comments } from '@shared/components/comments/comments';
 import { CarFilter } from '@shared/components/car-filter/car-filter';
 import { ReservationForm } from '@shared/components/reservation-form/reservation-form';
+import { Signup } from './features/signup/signup';
+import { Signin } from './features/signin/signin';
 
 @Component({
   selector: 'app-root',
-  imports: [RouterOutlet, Navbar, Footer, CarCrad, Hero, MainPage, CarDetails, Comments, CarFilter, ReservationForm],
+  imports: [RouterOutlet, Navbar, Footer, CarCrad, Hero, MainPage, CarDetails, Comments, CarFilter, ReservationForm, Signup, Signin],
   templateUrl: './app.html',
   styleUrl: './app.css',
 })

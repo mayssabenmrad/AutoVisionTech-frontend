@@ -1,0 +1,70 @@
+@tailwind utilities;
+@import "tailwindcss";
+
+/* Role Selection */
+.role-option {
+  @apply flex flex-col items-center gap-2 p-6 rounded-xl;
+  @apply bg-slate-700/30 border-2 border-slate-700/50;
+  @apply text-slate-300 transition-all duration-300;
+  @apply hover:bg-slate-700/50 hover:border-slate-600;
+  @apply cursor-pointer;
+}
+
+.role-option.active {
+  @apply bg-gradient-to-br from-blue-600/20 to-cyan-600/20;
+  @apply border-blue-500/50 text-white;
+  box-shadow: 0 0 30px rgba(37, 99, 235, 0.3);
+}
+
+.role-option svg {
+  @apply transition-transform duration-300;
+}
+
+.role-option.active svg {
+  @apply scale-110 text-blue-400;
+}
+
+.role-option span {
+  @apply text-lg font-semibold;
+}
+
+.role-description {
+  @apply text-xs text-slate-500 text-center mt-1;
+}
+
+.role-option.active .role-description {
+  @apply text-slate-300;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .signup-container {
+    @apply p-6;
+  }
+
+  .role-selection {
+    @apply grid-cols-1;
+  }
+}
+
+/* Animations */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+.form-group {
+  animation: fadeIn 0.5s ease-out both;
+}
+
+.form-group:nth-child(1) { animation-delay: 0.1s; }
+.form-group:nth-child(2) { animation-delay: 0.15s; }
+.form-group:nth-child(3) { animation-delay: 0.2s; }
+.form-group:nth-child(4) { animation-delay: 0.25s; }
+.form-group:nth-child(5) { animation-delay: 0.3s; }
+.form-group:nth-child(6) { animation-delay: 0.35s; }
+.form-group:nth-child(7) { animation-delay: 0.4s; }
