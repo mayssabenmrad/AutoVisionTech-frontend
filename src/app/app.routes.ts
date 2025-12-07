@@ -4,6 +4,7 @@ import { ManageCars } from './features/manage-cars/manage-cars';
 import { AdminPanel } from './features/admin-panel/admin-panel';
 import { Signup } from './features/signup/signup';
 import { Signin } from './features/signin/signin';
+import { ManageReservations } from './features/manage-reservations/manage-reservations';
 
 export const routes: Routes = [
   { path: '', component: MainPage },
@@ -11,5 +12,6 @@ export const routes: Routes = [
   { path: 'admin-panel', component: AdminPanel },
   { path: 'signup', component: Signup },
   { path: 'signin', component: Signin },
+  { path: 'manage-reservations', component: ManageReservations },
   { path: '**', redirectTo: '' },
 ];
