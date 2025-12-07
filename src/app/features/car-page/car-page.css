@@ -1,0 +1,104 @@
+@tailwind utilities;
+@import "tailwindcss";
+
+/* Main Container */
+.car-page-container {
+  @apply min-h-screen;
+  background: linear-gradient(135deg, #0a0e17 0%, #1a1f2e 50%, #0a0e17 100%);
+}
+
+.car-page-content {
+  @apply max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8;
+  @apply flex flex-col lg:flex-row gap-8;
+}
+
+/* Left Column */
+.left-column {
+  @apply flex-1 space-y-8;
+  @apply w-full lg:w-3/5;
+}
+
+.car-details-section {
+  @apply w-full;
+}
+
+.comments-section {
+  @apply w-full;
+}
+
+/* Right Column (Fixed) */
+.right-column {
+  @apply w-full lg:w-2/5;
+  @apply lg:sticky lg:top-24;
+  @apply self-start;
+  max-height: calc(100vh - 7rem);
+  @apply overflow-y-auto;
+}
+
+/* Scrollbar styling for right column */
+.right-column::-webkit-scrollbar {
+  @apply w-2;
+}
+
+.right-column::-webkit-scrollbar-track {
+  @apply bg-slate-800 rounded-full;
+}
+
+.right-column::-webkit-scrollbar-thumb {
+  @apply bg-blue-600 rounded-full;
+  @apply hover:bg-blue-500;
+}
+
+/* Animations */
+.left-column {
+  animation: slideInLeft 0.6s ease-out;
+}
+
+.right-column {
+  animation: slideInRight 0.6s ease-out;
+}
+
+@keyframes slideInLeft {
+  from {
+    opacity: 0;
+    transform: translateX(-30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes slideInRight {
+  from {
+    opacity: 0;
+    transform: translateX(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+/* Responsive Design */
+@media (max-width: 1024px) {
+  .car-page-content {
+    @apply flex-col;
+  }
+
+  .left-column,
+  .right-column {
+    @apply w-full;
+  }
+
+  .right-column {
+    @apply static;
+    max-height: none;
+  }
+}
+
+@media (max-width: 768px) {
+  .car-page-content {
+    @apply px-4 py-6;
+  }
+}

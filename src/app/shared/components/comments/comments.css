@@ -3,7 +3,7 @@
 
 /* Main container */
 .comments-container {
-  @apply bg-slate-900/40 p-6 rounded-2xl border border-slate-700 w-1/2;
+  @apply bg-slate-900/40 p-6 rounded-2xl border border-slate-700 w-full;
   @apply space-y-6;
 }
 
@@ -25,7 +25,6 @@ textarea {
 }
 
 /* HEADER FOR EACH COMMENT */
-
 .comment-avatar {
   @apply w-10 h-10 flex items-center justify-center rounded-full bg-slate-700 text-white;
 }
