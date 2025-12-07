@@ -2,176 +2,32 @@
   <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
     
     <!-- Header -->
-    <div class="page-header">
-      <div class="flex items-center justify-between">
+    <div class="flex items-center justify-between mb-8">
+      <div>
         <div class="header-title-wrapper">
           <div class="title-icon">
-            <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 17h2c.6 0 1-.4 1-1v-3c0-.9-.7-1.7-1.5-1.9C18.7 10.6 16 10 16 10s-1.3-1.4-2.2-2.3c-.5-.4-1.1-.7-1.8-.7H5c-.6 0-1.1.4-1.4.9l-1.4 2.9A3.7 3.7 0 0 0 2 12v4c0 .6.4 1 1 1h2"/>
-              <circle cx="7" cy="17" r="2"/>
-              <path d="M9 17h6"/>
-              <circle cx="17" cy="17" r="2"/>
-            </svg>
+            <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 17h2c.6 0 1-.4 1-1v-3c0-.9-.7-1.7-1.5-1.9C18.7 10.6 16 10 16 10s-1.3-1.4-2.2-2.3c-.5-.4-1.1-.7-1.8-.7H5c-.6 0-1.1.4-1.4.9l-1.4 2.9A3.7 3.7 0 0 0 2 12v4c0 .6.4 1 1 1h2"/><circle cx="7" cy="17" r="2"/><path d="M9 17h6"/><circle cx="17" cy="17" r="2"/></svg>
           </div>
           <div>
             <h1 class="page-title">Car Inventory Management</h1>
             <p class="page-subtitle">Add new vehicles and update their status</p>
           </div>
         </div>
-        
-        <button (click)="toggleAddForm()" class="btn-active px-6 py-3">
-          <svg *ngIf="!showAddForm" class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/>
-          </svg>
-          <svg *ngIf="showAddForm" class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
-          </svg>
-          <span>{{ showAddForm ? 'Cancel' : 'Add New Car' }}</span>
-        </button>
       </div>
+      
+      <button (click)="toggleAddForm()" class="btn-active px-6 py-3">
+        <svg *ngIf="!showAddForm" class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/></svg>
+        <svg *ngIf="showAddForm" class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
+        <span>{{ showAddForm ? 'Cancel' : 'Add New Car' }}</span>
+      </button>
     </div>
 
-    <!-- Add Car Form -->
-    <div *ngIf="showAddForm" class="form-card">
-      <h3 class="form-card-title">Add New Vehicle</h3>
-      <form (ngSubmit)="handleAddCar()" class="space-y-6">
-        
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-          <!-- Brand -->
-          <div class="form-group">
-            <label class="form-label">Brand</label>
-            <div class="input-wrapper">
-              <input
-                type="text"
-                [(ngModel)]="newCarForm.brand"
-                name="brand"
-                placeholder="e.g., Mercedes-Benz"
-                class="input"
-                required
-              />
-            </div>
-          </div>
-
-          <!-- Model -->
-          <div class="form-group">
-            <label class="form-label">Model</label>
-            <div class="input-wrapper">
-              <input
-                type="text"
-                [(ngModel)]="newCarForm.model"
-                name="model"
-                placeholder="e.g., AMG GT"
-                class="input"
-                required
-              />
-            </div>
-          </div>
-        </div>
-
-        <!-- Description -->
-        <div class="form-group">
-          <label class="form-label">Description</label>
-          <textarea
-            [(ngModel)]="newCarForm.description"
-            name="description"
-            placeholder="Detailed description of the vehicle..."
-            rows="3"
-            class="field-input"
-            required
-          ></textarea>
-        </div>
-
-        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-          <!-- Year -->
-          <div class="form-group">
-            <label class="form-label">Year</label>
-            <div class="input-wrapper">
-              <input
-                type="number"
-                [(ngModel)]="newCarForm.year"
-                name="year"
-                min="1900"
-                [max]="currentYearPlusOne"
-                class="input"
-                required
-              />
-            </div>
-          </div>
-
-          <!-- Price -->
-          <div class="form-group">
-            <label class="form-label">Price ($)</label>
-            <div class="input-wrapper">
-              <input
-                type="number"
-                [(ngModel)]="newCarForm.price"
-                name="price"
-                min="0"
-                step="1000"
-                class="input"
-                required
-              />
-            </div>
-          </div>
-
-          <!-- Mileage -->
-          <div class="form-group">
-            <label class="form-label">Mileage (km)</label>
-            <div class="input-wrapper">
-              <input
-                type="number"
-                [(ngModel)]="newCarForm.kilometerAge"
-                name="mileage"
-                min="0"
-                class="input"
-                required
-              />
-            </div>
-          </div>
-
-          <!-- Condition -->
-          <div class="form-group">
-            <label class="form-label">Condition</label>
-            <div class="input-wrapper">
-              <input
-                type="text"
-                [(ngModel)]="newCarForm.condition"
-                name="condition"
-                placeholder="e.g., Excellent"
-                class="input"
-                required
-              />
-            </div>
-          </div>
-        </div>
-
-        <!-- Image Upload -->
-        <div class="form-group">
-          <label class="form-label">Vehicle Image</label>
-          <div class="input-wrapper">
-            <input
-              type="file"
-              (change)="onImageSelected($event)"
-              name="imageFile"
-              accept="image/*"
-              class="field-input"
-            />
-          </div>
-          <p class="text-xs text-slate-500 mt-1">Upload a vehicle image (optional - default image will be used if not provided)</p>
-          
-          <!-- Image Preview -->
-          <div *ngIf="imagePreview" class="mt-4">
-            <p class="text-xs text-slate-400 mb-2">Preview:</p>
-            <img [src]="imagePreview" alt="Preview" class="w-32 h-24 rounded-lg object-cover border-2 border-blue-500/50">
-          </div>
-        </div>
-
-        <!-- Submit Button -->
-        <button type="submit" [disabled]="!isNewCarFormValid()" class="submit-btn">
-          Add Vehicle
-        </button>
-      </form>
-    </div>
+    <!-- Add Car Form Component -->
+    <app-add-car 
+      *ngIf="showAddForm" 
+      (carAdded)="onCarAdded($event)"
+      (cancelled)="onAddCancelled()"
+    ></app-add-car>
 
     <!-- Stats -->
     <div class="grid grid-cols-1 sm:grid-cols-4 gap-6 mb-8">
@@ -182,9 +38,7 @@
             <p class="stat-value">{{ totalCars }}</p>
           </div>
           <div class="stat-icon blue">
-            <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 17h2c.6 0 1-.4 1-1v-3c0-.9-.7-1.7-1.5-1.9C18.7 10.6 16 10 16 10s-1.3-1.4-2.2-2.3c-.5-.4-1.1-.7-1.8-.7H5c-.6 0-1.1.4-1.4.9l-1.4 2.9A3.7 3.7 0 0 0 2 12v4c0 .6.4 1 1 1h2"/>
-            </svg>
+            <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 17h2c.6 0 1-.4 1-1v-3c0-.9-.7-1.7-1.5-1.9C18.7 10.6 16 10 16 10s-1.3-1.4-2.2-2.3c-.5-.4-1.1-.7-1.8-.7H5c-.6 0-1.1.4-1.4.9l-1.4 2.9A3.7 3.7 0 0 0 2 12v4c0 .6.4 1 1 1h2"/></svg>
           </div>
         </div>
       </div>
@@ -196,9 +50,7 @@
             <p class="stat-value text-green-400">{{ availableCars }}</p>
           </div>
           <div class="stat-icon green">
-            <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
-            </svg>
+            <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
           </div>
         </div>
       </div>
@@ -210,9 +62,7 @@
             <p class="stat-value text-yellow-400">{{ reservedCars }}</p>
           </div>
           <div class="stat-icon yellow">
-            <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/>
-            </svg>
+            <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
           </div>
         </div>
       </div>
@@ -224,9 +74,7 @@
             <p class="stat-value text-red-400">{{ soldCars }}</p>
           </div>
           <div class="stat-icon red">
-            <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
-            </svg>
+            <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
           </div>
         </div>
       </div>
@@ -279,7 +127,7 @@
                   [(ngModel)]="editForm.price"
                   min="0"
                   step="1000"
-                  class="select-input w-32"
+                  class="w-32 px-3 py-1.5 bg-slate-700 border border-slate-600 rounded-lg text-white text-sm focus:outline-none focus:border-blue-500"
                 />
                 <span *ngIf="!isEditing(car.id)" class="text-slate-300">
                   ${{ car.price.toLocaleString() }}
@@ -303,12 +151,8 @@
 
                 <span
                   *ngIf="!isEditing(car.id)"
-                  class="status-badge"
-                  [ngClass]="{
-                    'available-badge': car.status === 'available',
-                    'reserved-badge': car.status === 'reserved',
-                    'sold-badge': car.status === 'sold'
-                  }"
+                  class="px-3 py-1 rounded-full text-xs border capitalize"
+                  [ngClass]="getStatusColor(car.status)"
                 >
                   {{ car.status }}
                 </span>
@@ -318,29 +162,21 @@
               <td class="whitespace-nowrap">
                 <!-- Edit Mode -->
                 <div *ngIf="isEditing(car.id)" class="flex items-center gap-2">
-                  <button (click)="handleSaveEdit(car.id)" class="action-btn save-btn" title="Save">
-                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
-                    </svg>
+                  <button (click)="handleSaveEdit(car.id)" class="action-btn save-btn p-2" title="Save">
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>
                   </button>
-                  <button (click)="handleCancelEdit()" class="action-btn cancel-btn" title="Cancel">
-                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
-                    </svg>
+                  <button (click)="handleCancelEdit()" class="action-btn cancel-btn p-2" title="Cancel">
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
                   </button>
                 </div>
 
                 <!-- Normal Mode -->
                 <div *ngIf="!isEditing(car.id)" class="flex items-center gap-2">
-                  <button (click)="handleStartEdit(car)" class="action-btn edit-btn" title="Edit">
-                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/>
-                    </svg>
+                  <button (click)="handleStartEdit(car)" class="action-btn edit-btn p-2" title="Edit">
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/></svg>
                   </button>
                   <button (click)="handleDeleteCar(car.id)" class="action-btn delete-btn" title="Delete">
-                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/>
-                    </svg>
+                    <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/></svg>
                   </button>
                 </div>
               </td>

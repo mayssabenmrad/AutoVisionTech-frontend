@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
+import { AddCar } from '@shared/components/add-car/add-car';
 
 export interface Car {
   id: string;
@@ -18,12 +19,11 @@ export interface Car {
 @Component({
   selector: 'app-manage-cars',
   standalone: true,
-  imports: [CommonModule, FormsModule],
+  imports: [CommonModule, FormsModule, AddCar],
   templateUrl: './manage-cars.html',
   styleUrls: ['./manage-cars.css']
 })
 export class ManageCars {
-  // Cars data
   cars: Car[] = [
     {
       id: '1',
@@ -75,33 +75,14 @@ export class ManageCars {
     }
   ];
 
-  currentYearPlusOne = new Date().getFullYear() + 1;
-
-  // Edit state
+  // UI State
+  showAddForm = false;
   editingCarId: string | null = null;
   editForm = {
     status: 'available' as 'available' | 'reserved' | 'sold',
     price: 0
   };
 
-  // Add car form
-  showAddForm = false;
-  imagePreview: string | null = null;
-  selectedImageFile: File | null = null;
-  
-  newCarForm = {
-    brand: '',
-    model: '',
-    description: '',
-    year: new Date().getFullYear(),
-    price: 0,
-    kilometerAge: 0,
-    condition: '',
-    status: 'available' as 'available' | 'reserved' | 'sold',
-    images: ['']
-  };
-
-  // Computed stats
   get totalCars(): number {
     return this.cars.length;
   }
@@ -118,31 +99,23 @@ export class ManageCars {
     return this.cars.filter(c => c.status === 'sold').length;
   }
 
-  // Toggle add form
   toggleAddForm(): void {
     this.showAddForm = !this.showAddForm;
-    if (!this.showAddForm) {
-      this.resetNewCarForm();
-    }
   }
 
-  // Handle image selection
-  onImageSelected(event: Event): void {
-    const input = event.target as HTMLInputElement;
-    if (input.files && input.files[0]) {
-      const file = input.files[0];
-      this.selectedImageFile = file;
-      
-      // Create image preview
-      const reader = new FileReader();
-      reader.onload = (e: ProgressEvent<FileReader>) => {
-        this.imagePreview = e.target?.result as string;
-      };
-      reader.readAsDataURL(file);
-    }
+  // Handle car added event
+  onCarAdded(car: Car): void {
+    this.cars.unshift(car);
+    this.showAddForm = false;
+    alert(`Vehicle ${car.brand} ${car.model} has been added successfully with ${car.images.length} image(s)!`);
   }
 
-  // Start editing a car
+  // Handle add cancelled event
+  onAddCancelled(): void {
+    this.showAddForm = false;
+  }
+
+  // Handle start edit event
   handleStartEdit(car: Car): void {
     this.editingCarId = car.id;
     this.editForm = {
@@ -151,7 +124,7 @@ export class ManageCars {
     };
   }
 
-  // Save edited car
+  // Handle save edit event
   handleSaveEdit(carId: string): void {
     const carIndex = this.cars.findIndex(c => c.id === carId);
     if (carIndex !== -1) {
@@ -164,95 +137,26 @@ export class ManageCars {
     this.editForm = { status: 'available', price: 0 };
   }
 
-  // Cancel editing
+  // Handle cancel edit event
   handleCancelEdit(): void {
     this.editingCarId = null;
     this.editForm = { status: 'available', price: 0 };
   }
 
-  // Delete car
+  // Handle delete car event
   handleDeleteCar(carId: string): void {
-    const car = this.cars.find(c => c.id === carId);
-    if (car) {
-      const confirmDelete = confirm(
-        `Are you sure you want to delete ${car.brand} ${car.model}?\nThis action cannot be undone.`
-      );
-      
-      if (confirmDelete) {
-        this.cars = this.cars.filter(c => c.id !== carId);
-        
-        // Cancel edit mode if the deleted car was being edited
-        if (this.editingCarId === carId) {
-          this.editingCarId = null;
-          this.editForm = { status: 'available', price: 0 };
-        }
-        
-        alert(`${car.brand} ${car.model} has been deleted successfully!`);
-      }
+    const confirmDelete = confirm('Are you sure you want to delete this vehicle? This action cannot be undone.');
+    if (confirmDelete) {
+      this.cars = this.cars.filter(c => c.id !== carId);
     }
   }
 
-  // Add new car
-  handleAddCar(): void {
-    if (this.isNewCarFormValid()) {
-      // Use uploaded image preview or default image
-      const imageUrl = this.imagePreview || 'https://images.pexels.com/photos/358070/pexels-photo-358070.jpeg';
-      
-      const newCar: Car = {
-        id: Date.now().toString(),
-        brand: this.newCarForm.brand,
-        model: this.newCarForm.model,
-        description: this.newCarForm.description,
-        year: this.newCarForm.year,
-        price: this.newCarForm.price,
-        kilometerAge: this.newCarForm.kilometerAge,
-        condition: this.newCarForm.condition,
-        status: this.newCarForm.status,
-        images: [imageUrl]
-      };
-      
-      this.cars.unshift(newCar);
-      this.toggleAddForm();
-      alert(`Vehicle ${newCar.brand} ${newCar.model} has been added successfully!`);
-    }
-  }
-
-  // Check if new car form is valid
-  isNewCarFormValid(): boolean {
-    return !!(
-      this.newCarForm.brand.trim() &&
-      this.newCarForm.model.trim() &&
-      this.newCarForm.description.trim() &&
-      this.newCarForm.year > 0 &&
-      this.newCarForm.price > 0 &&
-      this.newCarForm.kilometerAge >= 0 &&
-      this.newCarForm.condition.trim()
-    );
-  }
-
-  // Reset new car form
-  resetNewCarForm(): void {
-    this.newCarForm = {
-      brand: '',
-      model: '',
-      description: '',
-      year: new Date().getFullYear(),
-      price: 0,
-      kilometerAge: 0,
-      condition: '',
-      status: 'available',
-      images: ['']
-    };
-    this.imagePreview = null;
-    this.selectedImageFile = null;
-  }
-
-  // Check if car is being edited
+  // Check if a car is currently being edited
   isEditing(carId: string): boolean {
     return this.editingCarId === carId;
   }
 
-  // Get status badge class
+  // Get CSS classes based on car status
   getStatusColor(status: string): string {
     switch (status) {
       case 'available':

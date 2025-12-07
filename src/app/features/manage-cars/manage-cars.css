@@ -1,19 +1,74 @@
 @tailwind utilities;
 @import "tailwindcss";
 
-/* Override stat-card animation delay for 4 cards */
+/* Specific animations */
+.stat-card {
+  animation: slideIn 0.5s ease-out both;
+}
+
+.stat-card:nth-child(1) {
+  animation-delay: 0.1s;
+}
+
+.stat-card:nth-child(2) {
+  animation-delay: 0.2s;
+}
+
+.stat-card:nth-child(3) {
+  animation-delay: 0.3s;
+}
+
 .stat-card:nth-child(4) {
   animation-delay: 0.4s;
 }
 
-/* Override table animation delay */
-.table-container {
-  animation-delay: 0.5s;
+@keyframes slideIn {
+  from {
+    opacity: 0;
+    transform: translateX(-20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
 }
 
-/* Cars table specific min-width */
+.table-container {
+  animation: slideUp 0.6s ease-out 0.5s both;
+}
+
+@keyframes slideUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Responsive */
 @media (max-width: 1024px) {
+  .table-wrapper {
+    @apply overflow-x-scroll;
+  }
+
   .data-table {
     @apply min-w-[900px];
+  }
+}
+
+@media (max-width: 768px) {
+  .page-title {
+    @apply text-2xl;
+  }
+
+  .table-header {
+    @apply flex-col items-start gap-4;
+  }
+
+  .stat-value {
+    @apply text-2xl;
   }
 }

@@ -18,30 +18,38 @@
       <!-- Desktop Navigation -->
       <div class="hidden md:flex items-center gap-4">
         <button 
-          routerLink="/catalogue"
+          routerLink="/"
           [ngClass]="{'btn-active': isActivePage('catalogue')}"
-          class="btn-common">
+          class="btn-common"
+          (click)="currentPage='catalogue'"
+        >
           Catalog
         </button>
         
         <button 
           routerLink="/reservations"
           [ngClass]="{'btn-active': isActivePage('reservations')}"
-          class="btn-common">
+          class="btn-common"
+          (click)="currentPage='reservations'"
+        >
           Reservations
         </button>
         
         <button 
-          routerLink="/cars"
-          [ngClass]="{'btn-active': isActivePage('cars')}"
-          class="btn-common">
+          routerLink="/manage-cars"
+          [ngClass]="{'btn-active': isActivePage('manage-cars')}"
+          class="btn-common"
+          (click)="currentPage='manage-cars'"
+        >
           Manage Cars
         </button>
 
         <button 
-          routerLink="/admin"
-          [ngClass]="{'btn-active': isActivePage('admin')}"
-          class="btn-common">
+          routerLink="/admin-panel"
+          [ngClass]="{'btn-active': isActivePage('admin-panel')}"
+          class="btn-common"
+          (click)="currentPage='admin-panel'"
+        >
           Admin Panel
         </button>
 
@@ -89,7 +97,9 @@
           'bg-blue-600 text-white': isActivePage('catalogue'),
           'text-slate-300 hover:bg-slate-700': !isActivePage('catalogue')
         }"
-        class="w-full text-left px-4 py-2 rounded-lg">
+        class="w-full text-left px-4 py-2 rounded-lg"
+        (click)="currentPage='catalogue'"
+        >
         Catalog
       </button>
       <button 
@@ -98,25 +108,31 @@
           'bg-blue-600 text-white': isActivePage('reservations'),
           'text-slate-300 hover:bg-slate-700': !isActivePage('reservations')
         }"
-        class="w-full text-left px-4 py-2 rounded-lg">
+        class="w-full text-left px-4 py-2 rounded-lg"
+        (click)="currentPage='reservations'"
+        >
         Reservations
       </button>
       <button 
-        routerLink="/cars"
+        routerLink="/manage-cars"
         [ngClass]="{
-          'bg-blue-600 text-white': isActivePage('cars'),
-          'text-slate-300 hover:bg-slate-700': !isActivePage('cars')
+          'bg-blue-600 text-white': isActivePage('manage-cars'),
+          'text-slate-300 hover:bg-slate-700': !isActivePage('manage-cars')
         }"
-        class="w-full text-left px-4 py-2 rounded-lg">
+        class="w-full text-left px-4 py-2 rounded-lg"
+        (click)="currentPage='manage-cars'"
+        >
         Manage Cars
       </button>
       <button 
-        routerLink="/admin"
+        routerLink="/admin-panel"
         [ngClass]="{
-          'bg-blue-600 text-white': isActivePage('admin'),
-          'text-slate-300 hover:bg-slate-700': !isActivePage('admin')
+          'bg-blue-600 text-white': isActivePage('admin-panel'),
+          'text-slate-300 hover:bg-slate-700': !isActivePage('admin-panel')
         }"
-        class="w-full text-left px-4 py-2 rounded-lg">
+        class="w-full text-left px-4 py-2 rounded-lg"
+        (click)="currentPage='admin-panel'"
+        >
         Admin Panel
       </button>
       <button 
