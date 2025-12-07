@@ -1,0 +1,96 @@
+@tailwind utilities;
+@import "tailwindcss";
+
+/* Filter Container */
+.filter-container {
+  @apply bg-slate-800/60 backdrop-blur-xl rounded-xl p-6 border border-slate-700/50 mb-6;
+  @apply space-y-4;
+  animation: slideDown 0.3s ease-out;
+}
+
+@keyframes slideDown {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Search Section */
+.search-section {
+  @apply space-y-2;
+}
+
+.search-input-group {
+  @apply relative flex items-center;
+}
+
+.search-icon {
+  @apply absolute left-4 w-5 h-5 text-slate-400 pointer-events-none;
+}
+
+.search-input {
+  @apply w-full pl-12 pr-12 py-3 rounded-xl;
+  @apply bg-slate-700/50 border border-slate-600;
+  @apply text-white placeholder-slate-500;
+  @apply transition-all duration-200;
+  @apply focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20;
+}
+
+.clear-btn {
+  @apply absolute right-4 p-1.5 rounded-lg;
+  @apply text-slate-400 hover:text-white hover:bg-slate-700/50;
+  @apply transition-all duration-200;
+}
+
+/* Filters Grid */
+.filters-grid {
+  @apply grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4;
+}
+
+.filter-field {
+  @apply space-y-2;
+}
+
+.filter-label {
+  @apply block text-sm font-medium text-slate-300;
+}
+
+.filter-input-wrapper {
+  @apply relative flex items-center;
+}
+
+.filter-icon {
+  @apply absolute left-3 w-5 h-5 text-blue-400 pointer-events-none z-10;
+}
+
+.filter-select {
+  @apply w-full pl-10 pr-4 py-3 rounded-xl;
+  @apply bg-slate-700/50 border border-slate-600;
+  @apply text-white;
+  @apply transition-all duration-200;
+  @apply focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20;
+  @apply cursor-pointer;
+}
+
+/* Reset Button */
+.reset-btn {
+  @apply w-full px-4 py-3 rounded-xl flex items-center justify-center gap-2;
+  @apply bg-slate-700/50 hover:bg-slate-600/50;
+  @apply text-white border border-slate-600 hover:border-slate-500;
+  @apply transition-all duration-200;
+}
+
+.reset-btn:hover {
+  @apply -translate-y-0.5;
+}
+
+/* Responsive */
+@media (max-width: 640px) {
+  .filters-grid {
+    @apply grid-cols-1;
+  }
+}

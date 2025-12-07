@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
+import { ReservationFilter, ReservationFilters } from '@shared/components/reservation-filter/reservation-filter';
 
 export interface Reservation {
   id: string;
@@ -26,7 +27,7 @@ export interface Car {
 @Component({
   selector: 'app-manage-reservations',
   standalone: true,
-  imports: [CommonModule, FormsModule],
+  imports: [CommonModule, FormsModule, ReservationFilter],
   templateUrl: './manage-reservations.html',
   styleUrls: ['./manage-reservations.css']
 })
@@ -126,15 +127,38 @@ export class ManageReservations {
   ];
 
   // Filters
-  filterStatus: string = 'all';
-  filterDate: string = '';
+  currentFilters: ReservationFilters = {
+    status: 'all',
+    date: '',
+    searchText: ''
+  };
+
+  // Handle filter changes
+  onFiltersChanged(filters: ReservationFilters): void {
+    this.currentFilters = filters;
+  }
 
   // Computed properties
   get filteredReservations(): Reservation[] {
     return this.reservations.filter(reservation => {
-      const matchesStatus = this.filterStatus === 'all' || reservation.status === this.filterStatus;
-      const matchesDate = !this.filterDate || reservation.date === this.filterDate;
-      return matchesStatus && matchesDate;
+      const car = this.getCarInfo(reservation.carId);
+      
+      // Filter by status
+      const matchesStatus = this.currentFilters.status === 'all' || 
+        reservation.status === this.currentFilters.status;
+      
+      // Filter by date
+      const matchesDate = !this.currentFilters.date || 
+        reservation.date === this.currentFilters.date;
+      
+      // Filter by search text (brand or model)
+      const matchesSearch = !this.currentFilters.searchText || 
+        (car && (
+          car.brand.toLowerCase().includes(this.currentFilters.searchText.toLowerCase()) ||
+          car.model.toLowerCase().includes(this.currentFilters.searchText.toLowerCase())
+        ));
+      
+      return matchesStatus && matchesDate && matchesSearch;
     });
   }
 
