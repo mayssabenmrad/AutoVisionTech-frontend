@@ -586,7 +586,7 @@ button:active {
 }
 
 /* ============================================
-   MODAL STYLES
+    MODAL STYLES
    ============================================ */
 .modal-overlay {
   @apply fixed inset-0 bg-black/70 backdrop-blur-sm;

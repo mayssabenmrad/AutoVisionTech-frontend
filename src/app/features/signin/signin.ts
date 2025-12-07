@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { Router } from '@angular/router';
+import { Router, RouterLink } from '@angular/router';
 
 export interface SignInFormData {
   email: string;
@@ -12,7 +12,7 @@ export interface SignInFormData {
 @Component({
   selector: 'app-signin',
   standalone: true,
-  imports: [CommonModule, FormsModule],
+  imports: [CommonModule, FormsModule, RouterLink],
   templateUrl: './signin.html',
   styleUrls: ['./signin.css']
 })

@@ -75,42 +75,8 @@
       </div>
     </div>
 
-    <!-- Filters -->
-    <div class="bg-slate-800/60 backdrop-blur-xl rounded-xl p-6 border border-slate-700/50 mb-6">
-      <div class="flex flex-col sm:flex-row gap-4">
-        <div class="flex-1">
-          <label class="block text-sm font-medium text-slate-300 mb-2">Filter by Status</label>
-          <div class="flex items-center gap-3">
-            <svg class="w-5 h-5 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 4a1 1 0 011-1h16a1 1 0 011 1v2.586a1 1 0 01-.293.707l-6.414 6.414a1 1 0 00-.293.707V17l-4 4v-6.586a1 1 0 00-.293-.707L3.293 7.293A1 1 0 013 6.586V4z"/>
-            </svg>
-            <select
-              [(ngModel)]="filterStatus"
-              class="flex-1 px-4 py-2 bg-slate-800 border border-slate-600 rounded-lg text-white focus:outline-none focus:border-blue-500"
-            >
-              <option value="all">All Status</option>
-              <option value="pending">Pending</option>
-              <option value="confirmed">Confirmed</option>
-              <option value="cancelled">Cancelled</option>
-            </select>
-          </div>
-        </div>
-
-        <div class="flex-1">
-          <label class="block text-sm font-medium text-slate-300 mb-2">Filter by Date</label>
-          <div class="flex items-center gap-3">
-            <svg class="w-5 h-5 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/>
-            </svg>
-            <input
-              type="date"
-              [(ngModel)]="filterDate"
-              class="flex-1 px-4 py-2 bg-slate-800 border border-slate-600 rounded-lg text-white focus:outline-none focus:border-blue-500"
-            />
-          </div>
-        </div>
-      </div>
-    </div>
+    <!-- Filters Component -->
+    <app-reservation-filter (filtersChanged)="onFiltersChanged($event)"></app-reservation-filter>
 
     <!-- Reservations List -->
     <div class="space-y-4">
@@ -229,7 +195,7 @@
           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/>
         </svg>
         <h3 class="text-lg font-semibold text-slate-400 mb-2">No reservations found</h3>
-        <p class="text-slate-500">Try adjusting your filters</p>
+        <p class="text-slate-500">Try adjusting your filters or search criteria</p>
       </div>
     </div>
   </div>

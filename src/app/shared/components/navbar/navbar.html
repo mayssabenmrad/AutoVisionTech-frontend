@@ -27,10 +27,10 @@
         </button>
         
         <button 
-          routerLink="/reservations"
-          [ngClass]="{'btn-active': isActivePage('reservations')}"
+          routerLink="/manage-reservations"
+          [ngClass]="{'btn-active': isActivePage('manage-reservations')}"
           class="btn-common"
-          (click)="currentPage='reservations'"
+          (click)="currentPage='manage-reservations'"
         >
           Reservations
         </button>
@@ -54,7 +54,7 @@
         </button>
 
         <!-- User Info -->
-        <div *ngIf="currentUser" class="flex items-center gap-20 ml-4 pl-4 border-l border-slate-700">
+        <div *ngIf="currentUser && false" class="flex items-center gap-20 ml-4 pl-4 border-l border-slate-700">
           <div class="flex items-center gap-3">
             <img
               [src]="currentUser.image"
@@ -71,6 +71,30 @@
             class="btn-common btn-logout">
             <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"/></svg>
             Logout
+          </button>
+        </div>
+
+        <!-- Auth Buttons (when not logged in) -->
+        <div *ngIf="true" class="flex items-center gap-3 ml-4 pl-4 border-l border-slate-700">
+          <button 
+            routerLink="/signin"
+            class="default-btn px-5 py-2.5 flex items-center gap-2"
+            (click)="currentPage='signin'"
+          >
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 16l-4-4m0 0l4-4m-4 4h14m-5 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h7a3 3 0 013 3v1"/>
+            </svg>
+            Sign In
+          </button>
+          <button 
+            routerLink="/signup"
+            class="btn-active px-5 py-2.5 flex items-center gap-2"
+            (click)="currentPage='signup'"
+          >
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M18 9v3m0 0v3m0-3h3m-3 0h-3m-2-5a4 4 0 11-8 0 4 4 0 018 0zM3 20a6 6 0 0112 0v1H3v-1z"/>
+            </svg>
+            Sign Up
           </button>
         </div>
       </div>
@@ -103,13 +127,13 @@
         Catalog
       </button>
       <button 
-        routerLink="/reservations"
+        routerLink="/manage-reservations"
         [ngClass]="{
-          'bg-blue-600 text-white': isActivePage('reservations'),
-          'text-slate-300 hover:bg-slate-700': !isActivePage('reservations')
+          'bg-blue-600 text-white': isActivePage('manage-reservations'),
+          'text-slate-300 hover:bg-slate-700': !isActivePage('manage-reservations')
         }"
         class="w-full text-left px-4 py-2 rounded-lg"
-        (click)="currentPage='reservations'"
+        (click)="currentPage='manage-reservations'"
         >
         Reservations
       </button>
@@ -134,6 +158,18 @@
         (click)="currentPage='admin-panel'"
         >
         Admin Panel
+      </button>
+      <button 
+        routerLink="/signin"
+        class="w-full text-left px-4 py-2 bg-blue-600 text-white rounded-lg"
+        >
+        Sign In
+      </button>
+      <button
+        routerLink="/signup"
+        class="w-full text-left px-4 py-2 bg-green-600 text-white rounded-lg"
+        >
+        Sign Up
       </button>
       <button 
         (click)="signOut()"
