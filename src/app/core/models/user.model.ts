@@ -12,6 +12,7 @@ export interface User {
 
 export interface UserFilterDto {
   role?: 'agent' | 'admin';
+  isActive?: boolean;
   email?: string;
   name?: string;
   createdAtMin?: string;
