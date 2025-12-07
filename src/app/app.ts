@@ -14,10 +14,11 @@ import { Signin } from './features/signin/signin';
 import { AdminPanel } from './features/admin-panel/admin-panel';
 import { ManageCars } from './features/manage-cars/manage-cars';
 import { CarPage } from './features/car-page/car-page';
+import { ManageReservations } from './features/manage-reservations/manage-reservations';
 
 @Component({
   selector: 'app-root',
-  imports: [RouterOutlet, Navbar, Footer, CarCrad, Hero, MainPage, CarDetails, Comments, CarFilter, ReservationForm, Signup, Signin, AdminPanel, ManageCars, CarPage],
+  imports: [RouterOutlet, Navbar, Footer, ManageReservations ,CarCrad, Hero, MainPage, CarDetails, Comments, CarFilter, ReservationForm, Signup, Signin, AdminPanel, ManageCars, CarPage],
   templateUrl: './app.html',
   styleUrl: './app.css',
 })
