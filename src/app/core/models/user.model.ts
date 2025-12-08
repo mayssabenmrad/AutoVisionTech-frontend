@@ -6,7 +6,7 @@ export interface User {
   image: string | null;
   createdAt: string;
   updatedAt: string;
-  role: string;
+  role: 'admin' | 'agent';
   isActive: boolean;
 }
 
@@ -33,7 +33,6 @@ export interface UserResponse {
 export interface UpdateProfileDto {
   name?: string;
   email?: string;
-  location?: string;
 }
 
 export interface ChangePasswordDto {

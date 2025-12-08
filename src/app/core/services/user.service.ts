@@ -1,6 +1,6 @@
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { ChangePasswordDto, ProfileUpdateResponse, UpdateProfileDto, UserFilterDto, UserResponse } from '../models';
+import { ChangePasswordDto, ProfileUpdateResponse, UpdateProfileDto, User, UserFilterDto, UserResponse } from '../models';
 import { Observable, tap } from 'rxjs';
 import { AuthService } from './auth.service';
 import { BASE_URL } from '../../../lib/auth-client';
@@ -114,4 +114,26 @@ export class UserService {
       })
     );
   }
+  /**
+ * Updates only the activation status of a user
+ */
+updateActivateUser(userId: string, isActive: boolean) {
+  return this.http.patch<User>(
+    `${this.apiUrl}/isActive/${userId}`,
+    { isActive },
+    { withCredentials: true }
+  );
+}
+
+/**
+ * Updates only the role of a user
+ */
+updateUserRole(userId: string, role: 'admin' | 'agent') {
+  return this.http.patch<User>(
+    `${this.apiUrl}/role/${userId}`,
+    { role },
+    { withCredentials: true }
+  );
+}
+
 }
