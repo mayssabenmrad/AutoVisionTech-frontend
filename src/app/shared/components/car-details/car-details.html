@@ -1,4 +1,4 @@
-<div class="w-full">
+<div class="w-full" *ngIf="car">
   <!-- Main Image Gallery -->
   <div class="image-gallery">
     <div class="main-image-wrapper group">
@@ -126,31 +126,14 @@
       </svg>
       Key Features
     </h2>
-    <div class="features-grid">
-      <div class="feature-item">
-        <svg xmlns="http://www.w3.org/2000/svg" class="feature-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M20 6 9 17l-5-5"/></svg>
-        <span>Turbo Engine</span>
-      </div>
-      <div class="feature-item">
-        <svg xmlns="http://www.w3.org/2000/svg" class="feature-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M20 6 9 17l-5-5"/></svg>
-        <span>Leather Seats</span>
-      </div>
-      <div class="feature-item">
-        <svg xmlns="http://www.w3.org/2000/svg" class="feature-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M20 6 9 17l-5-5"/></svg>
-        <span>Navigation System</span>
-      </div>
-      <div class="feature-item">
-        <svg xmlns="http://www.w3.org/2000/svg" class="feature-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M20 6 9 17l-5-5"/></svg>
-        <span>Parking Sensors</span>
-      </div>
-      <div class="feature-item">
-        <svg xmlns="http://www.w3.org/2000/svg" class="feature-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M20 6 9 17l-5-5"/></svg>
-        <span>Sunroof</span>
-      </div>
-      <div class="feature-item">
-        <svg xmlns="http://www.w3.org/2000/svg" class="feature-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M20 6 9 17l-5-5"/></svg>
-        <span>Advanced Safety</span>
-      </div>
+    <div class="features">
+      <div 
+      class="feature-item" 
+      *ngFor="let feature of car.features"
+      >
+      <svg xmlns="http://www.w3.org/2000/svg" class="feature-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round"stroke-linejoin="round"stroke-width="3" d="M20 6 9 17l-5-5"/></svg>
+      <span>{{ feature }}</span>
     </div>
   </div>
+
 </div>
