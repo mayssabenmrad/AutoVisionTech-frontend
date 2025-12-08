@@ -8,7 +8,7 @@ export interface Car{
   model: string;
   description: string | null;
   year: number;
-  price: number | string;
+  price: number;
   kilometerAge: number;
   status: 'available' | 'sold' | 'reserved';
   condition: string;

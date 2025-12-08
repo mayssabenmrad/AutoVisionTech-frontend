@@ -47,7 +47,6 @@ export class CarService {
       if (filters.sortByYear) params = params.set('sortByYear', filters.sortByYear);
       if (filters.sortByKilometerAge) params = params.set('sortByKilometerAge', filters.sortByKilometerAge);
     }
-    console.log("HTTP params:", params.toString());
     return this.http.get<CarsResponse>(this.apiUrl, { params });
   }
 
@@ -61,7 +60,7 @@ export class CarService {
   /**
    * Create a new car (Authenticated User)
    */
-  addCar(data: CreateCarDto): Observable<Car> {
+  createCar(data: CreateCarDto): Observable<Car> {
     const formData = new FormData();
 
     formData.append('brand', data.brand);

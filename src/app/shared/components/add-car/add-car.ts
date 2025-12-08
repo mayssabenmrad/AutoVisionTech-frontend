@@ -1,7 +1,7 @@
 import { Component, Output, EventEmitter, ChangeDetectorRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { Car } from 'src/app/features/manage-cars/manage-cars';
+import { Car } from 'src/app/core/models';
 
 @Component({
   selector: 'app-add-car',
@@ -105,20 +105,20 @@ export class AddCar {
         ? this.imagePreviews 
         : ['https://images.pexels.com/photos/358070/pexels-photo-358070.jpeg'];
       
-      const newCar: Car = {
-        id: Date.now().toString(),
-        brand: this.newCarForm.brand,
-        model: this.newCarForm.model,
-        description: this.newCarForm.description,
-        year: this.newCarForm.year,
-        price: this.newCarForm.price,
-        kilometerAge: this.newCarForm.kilometerAge,
-        condition: this.newCarForm.condition,
-        status: this.newCarForm.status,
-        images: carImages
-      };
+      // const newCar: Car = {
+      //   id: Date.now().toString(),
+      //   brand: this.newCarForm.brand,
+      //   model: this.newCarForm.model,
+      //   description: this.newCarForm.description,
+      //   year: this.newCarForm.year,
+      //   price: this.newCarForm.price,
+      //   kilometerAge: this.newCarForm.kilometerAge,
+      //   condition: this.newCarForm.condition,
+      //   status: this.newCarForm.status,
+      //   images: carImages
+      // };
       
-      this.carAdded.emit(newCar);
+      // this.carAdded.emit(newCar);
       this.resetForm();
     }
   }
