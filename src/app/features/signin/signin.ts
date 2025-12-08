@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, ChangeDetectorRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { Router, RouterLink } from '@angular/router';
@@ -32,7 +32,11 @@ export class Signin {
   emailError = '';
   passwordError = '';
 
-  constructor(private authService: AuthService, private router: Router) {}
+  constructor(
+    private authService: AuthService, 
+    private router: Router,
+    private cdr: ChangeDetectorRef
+  ) {}
 
   // Toggle password visibility
   togglePasswordVisibility(): void {
@@ -84,40 +88,58 @@ export class Signin {
 
     this.isLoading = true;
     this.errorMessage = '';
-
-    console.log('Form data:', this.signInForm);
+    this.cdr.detectChanges(); // Force UI update
 
     try {
-      const result = await this.authService.login(this.signInForm.email, this.signInForm.password);
+      const result = await this.authService.login(
+        this.signInForm.email,
+        this.signInForm.password
+      );
 
-      console.log('Login result:', result);
-      // If login is successful, navigate to profile
-      if ('user' in result) {
-        this.router.navigate(['/']);
-      } else {
-        this.errorMessage = 'Email or password incorrect';
-        setTimeout(() => {
-          this.errorMessage = '';
-        }, 5000);
+      console.log("Login result:", result);
+
+      // Vérifier si c'est un succès (a la propriété 'user')
+      if (result && 'user' in result && result.user) {
+        console.log('Login successful, navigating to profile');
+        this.isLoading = false;
+        this.cdr.detectChanges();
+        this.router.navigate(['/profile']);
+        return;
       }
       
-    } catch (error) {
-      this.errorMessage = 'Invalid email or password. Please try again.';
-      console.error('Sign in error:', error);
-    } finally {
+      // Si on arrive ici, c'est une erreur
+      console.log("Login failed - showing error");
+      
+      this.errorMessage = 'Email or password incorrect';
       this.isLoading = false;
+      
+      // Force la détection de changement pour mettre à jour l'UI
+      this.cdr.detectChanges();
+      
+      console.log("Error message set to:", this.errorMessage);
+      console.log("isLoading set to:", this.isLoading);
+      
+      // Effacer le message après 5 secondes
+      setTimeout(() => {
+        this.errorMessage = '';
+        this.cdr.detectChanges();
+      }, 5000);
+
+    } catch (error: any) {
+      console.error('Login error (catch):', error);
+      this.errorMessage = error?.message || 'An error occurred during login';
+      this.isLoading = false;
+      this.cdr.detectChanges();
     }
   }
 
   // Navigate to signup
   goToSignup(): void {
-    console.log('Navigate to signup');
-    // this.router.navigate(['/signup']);
+    this.router.navigate(['/signup']);
   }
 
   // Navigate to forgot password
   goToForgotPassword(): void {
-    console.log('Navigate to forgot password');
     // this.router.navigate(['/forgot-password']);
   }
 

@@ -45,8 +45,9 @@ export class Navbar {
     this.mobileMenuOpen = !this.mobileMenuOpen;
   }
 
-  signOut(): void {
-    // Sign out logic here
+  async signOut(): Promise<void> {
+    await this.authService.logout();
+    this.currentPage = 'catalogue';
   }
 
   // Check Active Page

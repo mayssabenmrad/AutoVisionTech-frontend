@@ -74,12 +74,6 @@ export class Signup {
     this.isSubmitting = true;
     this.signUpError = '';
 
-    console.log('Submitting signup form:', {
-      ...this.signupForm,
-      password: '***',
-      confirmPassword: '***'
-    });
-
     this.authService.signUp(this.signupForm).subscribe({
       next: (response) => {
         console.log('Signup successful:', response);
@@ -107,7 +101,6 @@ export class Signup {
   }
 
   goToLogin(): void {
-    console.log('Navigate to login');
-    // this.router.navigate(['/login']);
+    this.router.navigate(['/signin']);
   }
 }
