@@ -1,13 +1,8 @@
-import { Component } from '@angular/core';
+import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-
-export interface Comment {
-  id: string;
-  name: string;
-  content: string;
-  createdAt: Date;
-}
+import { CarComment } from 'src/app/core/models';
+import { CommentService } from 'src/app/core/services/comment.service';
 
 @Component({
   selector: 'app-comments',
@@ -17,66 +12,79 @@ export interface Comment {
   styleUrls: ['./comments.css']
 })
 export class Comments {
-  // Comment list
-  comments: Comment[] = [
-    {
-      id: '1',
-      name: 'John Smith',
-      content: 'Amazing car! The performance is outstanding and the interior is luxurious. Highly recommend!',
-      createdAt: new Date('2024-12-01')
-    },
-    {
-      id: '2',
-      name: 'Sarah Johnson',
-      content: 'I visited the showroom last week. The car looks even better in person. The team was very helpful.',
-      createdAt: new Date('2024-12-03')
-    },
-    {
-      id: '3',
-      name: 'Michael Brown',
-      content: 'Great value for money. The mileage is low and the condition is excellent.',
-      createdAt: new Date('2024-12-05')
-    }
-  ];
 
+  @Input() comments: CarComment[] = [];
+  @Input() carId!: string;
+  @Output() commentAdded = new EventEmitter<void>(); // Change: emit just a refresh signal
+
+  constructor(private commentService: CommentService) {}
+  isSubmitting: boolean = false;
+
+  // Message properties
+  showMessage: boolean = false;
+  message: { type: 'success' | 'error'; text: string } = { type: 'success', text: '' };
+  isHiding = false;
+  
   // Comment form
   commentForm = {
     name: '',
     content: ''
   };
 
-  // Submit a comment
-  onSubmit(): void {
-    if (this.commentForm.name.trim() && this.commentForm.content.trim()) {
-      const newComment: Comment = {
-        id: this.generateId(),
-        name: this.commentForm.name.trim(),
-        content: this.commentForm.content.trim(),
-        createdAt: new Date()
-      };
-
-      // Add the comment to the beginning of the list
-      this.comments.unshift(newComment);
-
-      // Reset the form
-      this.commentForm = {
-        name: '',
-        content: ''
-      };
-    }
+    // Form validation
+  isFormValid(): boolean {
+    return this.commentForm.name.trim().length > 0 && this.commentForm.content.trim().length > 0;
   }
 
-  // Format the date
-  formatDate(date: Date): string {
-    return new Date(date).toLocaleDateString('en-US', {
-      year: 'numeric',
-      month: 'short',
-      day: 'numeric'
+  // Display a message
+  private displayMessage(type: 'success' | 'error', text: string) {
+    this.showMessage = true;
+    this.message = { type, text };
+    this.isHiding = false;
+
+    setTimeout(() => {
+      this.isHiding = true;
+      setTimeout(() => {
+        this.showMessage = false;
+      }, 500);
+    }, 5000);
+  }
+
+  // After clicking "publish review"
+  onSubmit() : void{
+    // Validation
+    if (!this.isFormValid()) {
+      this.displayMessage('error', 'Please provide a rating and comment content.');
+      return;
+    }
+
+    this.isSubmitting = true;
+
+    this.commentService.addComment({
+      name: this.commentForm.name, 
+      content: this.commentForm.content, 
+      carId: this.carId
+    }).subscribe({
+      next: (response) => {
+        this.displayMessage('success', 'Comment submitted successfully!');
+        
+        // Emit a signal for the parent to reload comments
+        this.commentAdded.emit();
+        
+        // Reset form
+        this.commentForm.name = '';
+        this.commentForm.content = '';
+        this.isSubmitting = false;
+      },
+      error: (error) => {
+        this.displayMessage('error', error.error?.message || 'Failed to submit comment.');
+        this.isSubmitting = false;
+      }
     });
   }
 
-  // Generate a unique ID
-  private generateId(): string {
-    return Date.now().toString(36) + Math.random().toString(36).substr(2);
+  // Format date correctly
+  formatDate(date: string): string {
+    return date.substring(0, 10);
   }
 }

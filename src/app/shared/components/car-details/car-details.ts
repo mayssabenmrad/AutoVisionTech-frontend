@@ -1,18 +1,6 @@
-import { Component } from '@angular/core';
+import { Component, Input } from '@angular/core';
 import { CommonModule } from '@angular/common';
-
-export interface Car {
-  id: string;
-  brand: string;
-  model: string;
-  year: number;
-  price: number;
-  kilometerAge: number;
-  condition: string;
-  status: 'available' | 'reserved' | 'sold';
-  description: string;
-  images: string[];
-}
+import { Car } from 'src/app/core/models';
 
 @Component({
   selector: 'app-car-details',
@@ -22,25 +10,7 @@ export interface Car {
   styleUrls: ['./car-details.css']
 })
 export class CarDetails {
-  // Specific car data
-  car: Car = {
-    id: '1',
-    brand: 'BMW',
-    model: 'M4',
-    year: 2021,
-    price: 65000,
-    kilometerAge: 29500,
-    condition: 'Excellent',
-    status: 'available',
-    description: 'A high-performance coupe with an aggressive design and great handling. Features include premium leather interior, advanced safety systems, and cutting-edge technology.',
-    images: [
-      'https://images.pexels.com/photos/358070/pexels-photo-358070.jpeg',
-      'https://images.pexels.com/photos/337909/pexels-photo-337909.jpeg',
-      'https://images.pexels.com/photos/337909/pexels-photo-337909.jpeg',
-      'https://images.pexels.com/photos/337909/pexels-photo-337909.jpeg',
-      'https://images.pexels.com/photos/164634/pexels-photo-164634.jpeg'
-    ]
-  };
+  @Input() car: Car | null= null;
 
   selectedImageIndex = 0;
 
@@ -64,17 +34,23 @@ export class CarDetails {
 
   // Navigate to Previous Image
   previousImage(): void {
+    if(this.car){
     this.selectedImageIndex = 
       this.selectedImageIndex > 0 
         ? this.selectedImageIndex - 1 
         : this.car.images.length - 1;
+    }
+
   }
 
   // Navigate to Next Image
   nextImage(): void {
+    if(this.car){
     this.selectedImageIndex = 
       this.selectedImageIndex < this.car.images.length - 1 
         ? this.selectedImageIndex + 1 
         : 0;
+    }
+
   }
 }

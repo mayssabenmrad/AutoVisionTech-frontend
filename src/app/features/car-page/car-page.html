@@ -5,18 +5,25 @@
     <div class="left-column">
       <!-- Car Details Section -->
       <div class="car-details-section">
-        <app-car-details></app-car-details>
+        <app-car-details [car] ="car"></app-car-details>
       </div>
       
       <!-- Comments Section -->
       <div class="comments-section">
-        <app-comments></app-comments>
+        <app-comments
+          *ngIf="car"
+          [comments]="car.comments ?? []"
+          [carId]="carId"
+          (commentAdded)="onCommentAdded()"
+        ></app-comments>
       </div>
     </div>
 
     <!-- Right Column: Reservation Form (Fixed) -->
     <div class="right-column">
-      <app-reservation-form></app-reservation-form>
+      <app-reservation-form
+      [car]="car"
+      ></app-reservation-form>
     </div>
 
   </div>

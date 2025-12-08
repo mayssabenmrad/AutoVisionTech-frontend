@@ -1,14 +1,8 @@
-import { Component } from '@angular/core';
+import { Component, Input } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-
-export interface ReservationFormData {
-  clientName: string;
-  email: string;
-  phone: string;
-  date: string;
-  time: string;
-}
+import { Car, CreateReservationDto } from 'src/app/core/models';
+import { ReservationService } from 'src/app/core/services/reservation.service';
 
 @Component({
   selector: 'app-reservation-form',
@@ -18,19 +12,26 @@ export interface ReservationFormData {
   styleUrls: ['./reservation-form.css']
 })
 export class ReservationForm {
+  @Input() car: Car | null = null;
   // Car status
   carStatus: 'available' | 'reserved' | 'sold' = 'available';
   
   // Show/hide the form
   showReservationForm = false;
+  showMessage: boolean = false;
+  message: { type: 'success' | 'error'; text: string } = { type: 'success', text: '' };
+  isHiding = false;
 
+
+  constructor(private reservationService: ReservationService) {}
   // Reservation form
-  reservationForm: ReservationFormData = {
+  reservationForm: CreateReservationDto = {
     clientName: '',
-    email: '',
-    phone: '',
-    date: '',
-    time: ''
+    clientEmail: '',
+    clientPhone: '',
+    visitDate: '',
+    visitTime: '',
+    status: 'pending',
   };
 
   // Toggle the form
@@ -43,11 +44,37 @@ export class ReservationForm {
 
   // Submit the reservation
   onSubmit(): void {
-    if (this.isFormValid()) {
-      console.log('Reservation submitted:', this.reservationForm);
-      alert(`Reservation confirmed for ${this.reservationForm.clientName} on ${this.reservationForm.date} at ${this.reservationForm.time}`);
-      this.resetForm();
-      this.showReservationForm = false;
+    if(this.car && this.reservationForm){
+        console.log(" Reservation data sent to API:", this.reservationForm);
+       console.log("Car ID:", this.car.id);
+      this.reservationService.createReservation(this.reservationForm, this.car.id)
+      .subscribe({
+        next: (response) => {
+        this.message = { type: 'success', text: 'Reservation added successfully!' };
+        this.showMessage = true;
+        this.isHiding = false;
+
+        setTimeout(() => {
+          this.isHiding = true;
+          setTimeout(() => {
+            this.showMessage = false;
+          }, 500);
+        }, 5000);
+      },
+      error: (error) => {
+        this.message = { type: 'error', text: error.error?.message || 'Failed to add reservation' };
+        this.showMessage = true;
+        this.isHiding = false;
+
+        setTimeout(() => {
+          this.isHiding = true;
+          setTimeout(() => {
+            this.showMessage = false;
+          }, 500);
+        }, 5000);
+      },
+    });
+
     }
   }
 
@@ -61,10 +88,10 @@ export class ReservationForm {
   private isFormValid(): boolean {
     return !!(
       this.reservationForm.clientName.trim() &&
-      this.reservationForm.email.trim() &&
-      this.reservationForm.phone.trim() &&
-      this.reservationForm.date &&
-      this.reservationForm.time
+      this.reservationForm.clientEmail.trim() &&
+      this.reservationForm.clientPhone.trim() &&
+      this.reservationForm.visitDate &&
+      this.reservationForm.visitTime
     );
   }
 
@@ -72,10 +99,11 @@ export class ReservationForm {
   private resetForm(): void {
     this.reservationForm = {
       clientName: '',
-      email: '',
-      phone: '',
-      date: '',
-      time: ''
+      clientEmail: '',
+      clientPhone: '',
+      visitDate: '',
+      visitTime: '',
+      status:'pending',
     };
   }
 
