@@ -99,38 +99,30 @@ export class ManageCars implements OnInit {
 
   // Handle save edit event
   async handleSaveEdit(carId: string): Promise<void> {
-    try {
-      this.isLoading = true;
-      
-      // Update the car with the new status and price
-      await this.carService.updateCar(carId, {
-        status: this.editForm.status,
-        price: this.editForm.price
-      });
+    this.isLoading = true;
+    this.cdr.detectChanges();
 
-      // Update local state
-      const carIndex = this.cars.findIndex(c => c.id === carId);
-      if (carIndex !== -1) {
-        this.cars[carIndex] = {
-          ...this.cars[carIndex],
-          status: this.editForm.status,
-          price: this.editForm.price
-        };
+    this.carService.updateCar(carId, {
+      status: this.editForm.status,
+      price: this.editForm.price
+    }).subscribe({
+      next: (updatedCar: Car) => {
+        const index = this.cars.findIndex(c => c.id === carId);
+        if (index !== -1) {
+          this.cars[index] = updatedCar;
+        }
+        this.isLoading = false;
+        this.editingCarId = null;
+        alert(`Vehicle ${updatedCar.brand} ${updatedCar.model} has been updated successfully!`);
+        this.cdr.detectChanges();
+      },
+      error: (err) => {
+        console.error('Error updating car:', err);
+        alert('Failed to update vehicle. Please try again later.');
+        this.isLoading = false;
+        this.cdr.detectChanges();
       }
-
-      this.editingCarId = null;
-      this.editForm = { status: 'available', price: 0 };
-      
-      alert('Vehicle updated successfully!');
-      this.cdr.detectChanges();
-
-    } catch (error: any) {
-      console.error('Error updating car:', error);
-      alert(error?.message || 'Failed to update vehicle');
-    } finally {
-      this.isLoading = false;
-      this.cdr.detectChanges();
-    }
+    });
   }
 
   // Handle cancel edit event
