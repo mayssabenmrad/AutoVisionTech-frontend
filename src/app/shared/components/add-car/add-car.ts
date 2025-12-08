@@ -1,7 +1,8 @@
 import { Component, Output, EventEmitter, ChangeDetectorRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { Car } from 'src/app/features/manage-cars/manage-cars';
+import { Car, CreateCarDto } from 'src/app/core/models';
+import { CarService } from 'src/app/core/services/car.service';
 
 @Component({
   selector: 'app-add-car',
@@ -15,6 +16,8 @@ export class AddCar {
   @Output() cancelled = new EventEmitter<void>();
 
   currentYearPlusOne = new Date().getFullYear() + 1;
+  isLoading = false;
+  errorMessage = '';
 
   newCarForm = {
     brand: '',
@@ -24,16 +27,37 @@ export class AddCar {
     price: 0,
     kilometerAge: 0,
     condition: '',
-    status: 'available' as 'available' | 'reserved' | 'sold'
+    status: 'available' as 'available' | 'reserved' | 'sold',
+    features: [] as string[]
   };
 
+  // Feature management
+  featureInput = '';
+  
   imageFiles: File[] = [];
   imagePreviews: string[] = [];
   imageError = '';
   MAX_IMAGES = 5;
-  MAX_SIZE = 1 * 1024 * 1024; // 1MB
+  MAX_SIZE = 5 * 1024 * 1024; // 5MB
 
-  constructor(private cdr: ChangeDetectorRef) {}
+  constructor(
+    private carService: CarService,
+    private cdr: ChangeDetectorRef
+  ) {}
+
+  // Add a feature to the list
+  addFeature(): void {
+    const feature = this.featureInput.trim();
+    if (feature && !this.newCarForm.features.includes(feature)) {
+      this.newCarForm.features.push(feature);
+      this.featureInput = '';
+    }
+  }
+
+  // Remove a feature from the list
+  removeFeature(index: number): void {
+    this.newCarForm.features.splice(index, 1);
+  }
 
   // Handle image selection
   onImagesSelected(event: Event): void {
@@ -56,12 +80,12 @@ export class AddCar {
 
     for (const file of selectedFiles) {
       if (file.size > this.MAX_SIZE) {
-        invalidFiles.push(file.name);
+        invalidFiles.push(`${file.name} (too large)`);
         continue;
       }
 
       if (!file.type.startsWith('image/')) {
-        invalidFiles.push(file.name);
+        invalidFiles.push(`${file.name} (not an image)`);
         continue;
       }
 
@@ -69,7 +93,7 @@ export class AddCar {
     }
 
     if (invalidFiles.length > 0) {
-      this.imageError = `The following files are invalid (size > 1MB or unsupported format): ${invalidFiles.join(', ')}`;
+      this.imageError = `Invalid files: ${invalidFiles.join(', ')}. Max size is 5MB.`;
     }
 
     validFiles.forEach(file => {
@@ -99,28 +123,50 @@ export class AddCar {
   }
 
   // Handle form submission
-  handleAddCar(): void {
-    if (this.isFormValid()) {
-      const carImages = this.imagePreviews.length > 0 
-        ? this.imagePreviews 
-        : ['https://images.pexels.com/photos/358070/pexels-photo-358070.jpeg'];
-      
-      const newCar: Car = {
-        id: Date.now().toString(),
-        brand: this.newCarForm.brand,
-        model: this.newCarForm.model,
-        description: this.newCarForm.description,
-        year: this.newCarForm.year,
-        price: this.newCarForm.price,
-        kilometerAge: this.newCarForm.kilometerAge,
-        condition: this.newCarForm.condition,
-        status: this.newCarForm.status,
-        images: carImages
-      };
-      
-      this.carAdded.emit(newCar);
-      this.resetForm();
+  async handleAddCar(): Promise<void> {
+    if (!this.isFormValid()) {
+      this.errorMessage = 'Please fill in all required fields correctly';
+      return;
     }
+
+    this.isLoading = true;
+    this.errorMessage = '';
+    this.cdr.detectChanges();
+
+    const carData: CreateCarDto = {
+      brand: this.newCarForm.brand.trim(),
+      model: this.newCarForm.model.trim(),
+      description: this.newCarForm.description.trim() || undefined,
+      year: this.newCarForm.year,
+      price: this.newCarForm.price,
+      kilometerAge: this.newCarForm.kilometerAge,
+      condition: this.newCarForm.condition.trim(),
+      status: this.newCarForm.status,
+      features: this.newCarForm.features.length > 0 ? this.newCarForm.features : undefined,
+      images: this.imageFiles.length > 0 ? this.imageFiles : undefined
+    };
+
+    this.carService.createCar(carData).subscribe({
+      next: (createdCar: Car) => {
+        console.log('Car created successfully:', createdCar);
+        this.carAdded.emit(createdCar);
+        this.resetForm();
+        this.isLoading = false;
+        this.cdr.detectChanges();
+      },
+      error: (error) => {
+        console.error('Error creating car:', error);
+        this.errorMessage = error?.error?.message || error?.message || 'Failed to add vehicle. Please try again.';
+        this.isLoading = false;
+        this.cdr.detectChanges();
+        
+        // Clear error message after 5 seconds
+        setTimeout(() => {
+          this.errorMessage = '';
+          this.cdr.detectChanges();
+        }, 5000);
+      }
+    });
   }
 
   // Handle cancel action
@@ -134,8 +180,8 @@ export class AddCar {
     return !!(
       this.newCarForm.brand.trim() &&
       this.newCarForm.model.trim() &&
-      this.newCarForm.description.trim() &&
-      this.newCarForm.year > 0 &&
+      this.newCarForm.year > 1900 &&
+      this.newCarForm.year <= this.currentYearPlusOne &&
       this.newCarForm.price > 0 &&
       this.newCarForm.kilometerAge >= 0 &&
       this.newCarForm.condition.trim()
@@ -152,10 +198,13 @@ export class AddCar {
       price: 0,
       kilometerAge: 0,
       condition: '',
-      status: 'available'
+      status: 'available',
+      features: []
     };
+    this.featureInput = '';
     this.imageFiles = [];
     this.imagePreviews = [];
     this.imageError = '';
+    this.errorMessage = '';
   }
 }

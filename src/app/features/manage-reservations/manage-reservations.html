@@ -10,8 +10,8 @@
           </svg>
         </div>
         <div>
-          <h1 class="page-title">Reservation Management</h1>
-          <p class="page-subtitle">Manage customer appointments and bookings</p>
+          <h1 class="page-title">Manage Reservations</h1>
+          <p class="page-subtitle">Manage client appointments and reservations</p>
         </div>
       </div>
     </div>
@@ -63,7 +63,7 @@
       <div class="stat-card">
         <div class="stat-content">
           <div>
-            <p class="stat-label">Cancelled</p>
+            <p class="stat-label">Canceled</p>
             <p class="stat-value text-red-400">{{ cancelledReservations }}</p>
           </div>
           <div class="stat-icon red">
@@ -78,17 +78,38 @@
     <!-- Filters Component -->
     <app-reservation-filter (filtersChanged)="onFiltersChanged($event)"></app-reservation-filter>
 
+    <!-- Loading State -->
+    <div *ngIf="isLoading" class="bg-slate-800/60 backdrop-blur-xl rounded-xl p-12 border border-slate-700/50 text-center">
+      <div class="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-500 mx-auto mb-4"></div>
+      <p class="text-slate-400">Chargement des réservations...</p>
+    </div>
+
+    <!-- Error State -->
+    <div *ngIf="error && !isLoading" class="bg-red-500/10 backdrop-blur-xl rounded-xl p-6 border border-red-500/50 mb-6">
+      <div class="flex items-center justify-between">
+        <div class="flex items-center gap-3">
+          <svg class="w-6 h-6 text-red-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
+          </svg>
+          <p class="text-red-400">{{ error }}</p>
+        </div>
+        <button (click)="retry()" class="px-4 py-2 bg-red-600 hover:bg-red-700 text-white rounded-lg transition-all">
+          Retry
+        </button>
+      </div>
+    </div>
+
     <!-- Reservations List -->
-    <div class="space-y-4">
+    <div class="space-y-4" *ngIf="!isLoading">
       <div
         *ngFor="let reservation of filteredReservations"
         class="bg-slate-800/60 backdrop-blur-xl rounded-xl p-6 border border-slate-700/50 hover:border-blue-500/50 transition-all"
       >
         <div class="flex flex-col lg:flex-row gap-6">
           <!-- Car Image -->
-          <div class="w-full lg:w-48 h-32 rounded-lg overflow-hidden flex-shrink-0" *ngIf="getCarInfo(reservation.carId) as car">
+          <div class="w-full lg:w-48 h-32 rounded-lg overflow-hidden flex-shrink-0" *ngIf="getCarInfo(reservation) as car">
             <img
-              [src]="car.images[0]"
+              [src]="car.images && car.images.length > 0 ? car.images[0] : 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcREuAKJP5WVqd4aJioQu7hJlZfr77fXfCAjeQ&s'"
               [alt]="car.brand + ' ' + car.model"
               class="w-full h-full object-cover"
             />
@@ -99,8 +120,8 @@
             <!-- Header -->
             <div class="flex items-start justify-between flex-wrap gap-4">
               <div>
-                <h4 class="text-white font-semibold text-lg mb-1" *ngIf="getCarInfo(reservation.carId) as car">
-                  {{ car.brand }} {{ car.model }}
+                <h4 class="text-white font-semibold text-lg mb-1" *ngIf="getCarInfo(reservation) as car">
+                  {{ car.brand }} {{ car.model }} ({{ car.year }})
                 </h4>
                 <div class="flex items-center gap-2">
                   <svg class="w-5 h-5" [ngClass]="reservation.status === 'confirmed' ? 'text-green-400' : reservation.status === 'cancelled' ? 'text-red-400' : 'text-yellow-400'" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -116,13 +137,13 @@
                   <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/>
                   </svg>
-                  <span>{{ reservation.date }}</span>
+                  <span>{{ formatDate(reservation.visitDate) }}</span>
                 </div>
                 <div class="flex items-center gap-2 text-slate-400 text-sm">
                   <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/>
                   </svg>
-                  <span>{{ reservation.time }}</span>
+                  <span>{{ reservation.visitTime }}</span>
                 </div>
               </div>
             </div>
@@ -139,13 +160,13 @@
                 <svg class="w-4 h-4 text-cyan-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/>
                 </svg>
-                <span class="text-slate-300">{{ reservation.email }}</span>
+                <span class="text-slate-300">{{ reservation.clientEmail }}</span>
               </div>
               <div class="flex items-center gap-2 text-sm">
                 <svg class="w-4 h-4 text-green-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z"/>
                 </svg>
-                <span class="text-slate-300">{{ reservation.phone }}</span>
+                <span class="text-slate-300">{{ reservation.clientPhone }}</span>
               </div>
             </div>
 
@@ -154,7 +175,7 @@
               <button
                 (click)="updateReservationStatus(reservation.id, 'confirmed')"
                 [disabled]="reservation.status === 'confirmed'"
-                class="px-4 py-2 rounded-lg flex items-center gap-2 transition-all"
+                class="px-4 py-2 rounded-lg flex items-center gap-2 transition-all text-sm"
                 [ngClass]="reservation.status === 'confirmed' ? 'bg-slate-700 text-slate-500 cursor-not-allowed' : 'bg-green-600 hover:bg-green-700 text-white'"
               >
                 <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -165,7 +186,7 @@
               <button
                 (click)="updateReservationStatus(reservation.id, 'pending')"
                 [disabled]="reservation.status === 'pending'"
-                class="px-4 py-2 rounded-lg flex items-center gap-2 transition-all"
+                class="px-4 py-2 rounded-lg flex items-center gap-2 transition-all text-sm"
                 [ngClass]="reservation.status === 'pending' ? 'bg-slate-700 text-slate-500 cursor-not-allowed' : 'bg-yellow-600 hover:bg-yellow-700 text-white'"
               >
                 <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -176,13 +197,22 @@
               <button
                 (click)="updateReservationStatus(reservation.id, 'cancelled')"
                 [disabled]="reservation.status === 'cancelled'"
-                class="px-4 py-2 rounded-lg flex items-center gap-2 transition-all"
+                class="px-4 py-2 rounded-lg flex items-center gap-2 transition-all text-sm"
                 [ngClass]="reservation.status === 'cancelled' ? 'bg-slate-700 text-slate-500 cursor-not-allowed' : 'bg-red-600 hover:bg-red-700 text-white'"
               >
                 <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z"/>
                 </svg>
                 Cancel
+              </button>
+              <button
+                (click)="deleteReservation(reservation.id)"
+                class="px-4 py-2 rounded-lg flex items-center gap-2 transition-all text-sm bg-slate-700 hover:bg-slate-600 text-white ml-auto"
+              >
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/>
+                </svg>
+                Delete
               </button>
             </div>
           </div>
@@ -194,8 +224,35 @@
         <svg class="w-16 h-16 text-slate-600 mx-auto mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/>
         </svg>
-        <h3 class="text-lg font-semibold text-slate-400 mb-2">No reservations found</h3>
-        <p class="text-slate-500">Try adjusting your filters or search criteria</p>
+        <h3 class="text-lg font-semibold text-slate-400 mb-2">Aucune réservation trouvée</h3>
+        <p class="text-slate-500">Essayez d'ajuster vos filtres ou critères de recherche</p>
+      </div>
+
+      <!-- Pagination -->
+      <div *ngIf="filteredReservations.length > 0 && totalPages > 1" class="bg-slate-800/60 backdrop-blur-xl rounded-xl p-4 border border-slate-700/50">
+        <div class="flex items-center justify-between flex-wrap gap-4">
+          <div class="text-sm text-slate-400">
+            Page {{ currentPage }} sur {{ totalPages }} ({{ totalItems }} réservations)
+          </div>
+          <div class="flex gap-2">
+            <button
+              (click)="previousPage()"
+              [disabled]="currentPage === 1"
+              class="px-4 py-2 rounded-lg transition-all text-sm"
+              [ngClass]="currentPage === 1 ? 'bg-slate-700 text-slate-500 cursor-not-allowed' : 'bg-blue-600 hover:bg-blue-700 text-white'"
+            >
+              Précédent
+            </button>
+            <button
+              (click)="nextPage()"
+              [disabled]="currentPage === totalPages"
+              class="px-4 py-2 rounded-lg transition-all text-sm"
+              [ngClass]="currentPage === totalPages ? 'bg-slate-700 text-slate-500 cursor-not-allowed' : 'bg-blue-600 hover:bg-blue-700 text-white'"
+            >
+              Suivant
+            </button>
+          </div>
+        </div>
       </div>
     </div>
   </div>

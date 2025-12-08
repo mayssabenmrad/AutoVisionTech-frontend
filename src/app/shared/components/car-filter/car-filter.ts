@@ -34,7 +34,7 @@ export class CarFilter implements OnInit {
 
   searchText = '';
   minPrice: number = 0;
-  maxPrice: number = 1000000000;
+  maxPrice: number = 1000000;
   sortBy: SortByType = 'none';
   showFilters = false;
 
@@ -51,7 +51,7 @@ export class CarFilter implements OnInit {
     { label: 'Under $20K', min: 0, max: 20000 },
     { label: '$20K - $40K', min: 20000, max: 40000 },
     { label: '$40K - $60K', min: 40000, max: 60000 },
-    { label: 'Over $60K', min: 60000, max: 100000 }
+    { label: 'Over $60K', min: 60000, max: 1000000 }
   ];
 
   ngOnInit(): void {
@@ -62,31 +62,29 @@ export class CarFilter implements OnInit {
     this.showFilters = !this.showFilters;
   }
 
-  onSearchChange(): void { console.log('Search text changed:', this.searchText); this.emitFilters(); }
-  onPriceChange(): void { this.emitFilters(); }
-  onSortChange(): void { this.emitFilters(); }
+  onSearchChange(): void { 
+    this.emitFilters();
+  }
 
   setQuickPriceFilter(min: number, max: number): void {
     this.minPrice = min;
     this.maxPrice = max;
-    this.emitFilters();
   }
 
   resetFilters(): void {
     this.searchText = '';
     this.minPrice = 0;
-    this.maxPrice = 1000;
+    this.maxPrice = 1000000;
     this.sortBy = 'none';
     this.emitFilters();
   }
 
-  private emitFilters(): void {
+  emitFilters(): void {
     this.filtersChange.emit({
       searchText: this.searchText || undefined,
       minPrice: this.minPrice != null ? this.minPrice : undefined,
       maxPrice: this.maxPrice != null ? this.maxPrice : undefined,
       sortBy: this.sortBy !== 'none' ? this.sortBy : undefined
     });
-
   }
 }

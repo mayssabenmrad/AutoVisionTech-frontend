@@ -1,7 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { Observable } from 'rxjs';
-
 import { 
   Car, 
   CarFilters, 
@@ -9,7 +8,6 @@ import {
   CreateCarDto, 
   UpdateCarDto 
 } from '../models';
-
 import { BASE_URL } from '../../../lib/auth-client';
 
 @Injectable({ providedIn: 'root' })
@@ -40,8 +38,8 @@ export class CarService {
       if (filters.minPrice != null) params = params.set('minPrice', filters.minPrice.toString());
       if (filters.maxPrice != null) params = params.set('maxPrice', filters.maxPrice.toString());
 
-      if (filters.minkilometerAge != null) params = params.set('minkilometerAge', filters.minkilometerAge.toString());
-      if (filters.maxkilometerAge != null) params = params.set('maxkilometerAge', filters.maxkilometerAge.toString());
+      if (filters.minKilometerAge != null) params = params.set('minKilometerAge', filters.minKilometerAge.toString());
+      if (filters.maxKilometerAge != null) params = params.set('maxKilometerAge', filters.maxKilometerAge.toString());
 
       if (filters.status) params = params.set('status', filters.status);
 
@@ -49,7 +47,6 @@ export class CarService {
       if (filters.sortByYear) params = params.set('sortByYear', filters.sortByYear);
       if (filters.sortByKilometerAge) params = params.set('sortByKilometerAge', filters.sortByKilometerAge);
     }
-
     return this.http.get<CarsResponse>(this.apiUrl, { params });
   }
 
@@ -63,7 +60,7 @@ export class CarService {
   /**
    * Create a new car (Authenticated User)
    */
-  addCar(data: CreateCarDto): Observable<Car> {
+  createCar(data: CreateCarDto): Observable<Car> {
     const formData = new FormData();
 
     formData.append('brand', data.brand);

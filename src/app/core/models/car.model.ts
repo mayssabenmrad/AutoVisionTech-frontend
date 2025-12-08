@@ -8,7 +8,7 @@ export interface Car{
   model: string;
   description: string | null;
   year: number;
-  price: number | string;
+  price: number;
   kilometerAge: number;
   status: 'available' | 'sold' | 'reserved';
   condition: string;
@@ -25,14 +25,14 @@ export interface Car{
 }
 
 export interface CarsResponse{
-    items: Car[];
-    meta: {
-        totalItems: number;
-        itemCount: number;
-        itemsPerPage: number;
-        totalPages: number;
-        currentPage: number;
-    };
+  items: Car[];
+  meta: {
+    totalItems: number;
+    itemCount: number;
+    itemsPerPage: number;
+    totalPages: number;
+    currentPage: number;
+  };
 }
 export interface CreateCarDto {
   brand: string;
@@ -62,16 +62,16 @@ export interface UpdateCarDto {
 }
 
 export interface CarFilters{
-    brand?: string;
-    model?: string;
-    minYear?: string;
-    maxYear?: string;
-    sortByYear?: 'asc' | 'desc';
-    minPrice?: string;
-    maxPrice?: string;
-    sortByPrice?: 'asc' | 'desc';
-    minkilometerAge?: string;
-    maxkilometerAge?: string;
-    sortByKilometerAge?: 'asc' | 'desc';
-    status?: string;
+  brand?: string;
+  model?: string;
+  minYear?: number;
+  maxYear?: number;
+  sortByYear?: 'asc' | 'desc';
+  minPrice?: number;
+  maxPrice?: number;
+  sortByPrice?: 'asc' | 'desc';
+  minKilometerAge?: number;
+  maxKilometerAge?: number;
+  sortByKilometerAge?: 'asc' | 'desc';
+  status?: string;
 }

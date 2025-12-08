@@ -15,9 +15,9 @@ export class CommentService{
    * Fetches a paginated list of comments for a specific product from the API.
    */
   getComments(
-      carId: string
+    carId: string
   ): Observable<CarComment[]>{
-      return this.http.get<CarComment[]>(`${this.apiUrl}/car/${carId}`);
+    return this.http.get<CarComment[]>(`${this.apiUrl}/car/${carId}`);
   }
 
   /**

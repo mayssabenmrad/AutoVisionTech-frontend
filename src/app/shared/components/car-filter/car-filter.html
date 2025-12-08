@@ -9,7 +9,7 @@
       <input
         type="text"
         [(ngModel)]="searchText"
-        (ngModelChange)="onSearchChange()"
+        (keyup.enter)="onSearchChange()"
         placeholder="Search by brand"
         class="input"
       />
@@ -67,10 +67,9 @@
               <input
                 type="number"
                 [(ngModel)]="minPrice"
-                (ngModelChange)="onPriceChange()"
                 min="0"
-                max="{{ maxPrice ?? 1000 }}"
-                [max]="maxPrice"
+                max="1000000"
+                step="1000"
                 class="price-input"
               />
             </div>
@@ -85,9 +84,9 @@
               <input
                 type="number"
                 [(ngModel)]="maxPrice"
-                (ngModelChange)="onPriceChange()"
                 min="0"
-                max="1000"
+                max="1000000"
+                step="1000"
                 class="price-input"
               />
             </div>
@@ -100,17 +99,15 @@
           <input
             type="range"
             [(ngModel)]="minPrice"
-            (ngModelChange)="onPriceChange()"
             min="0"
-            [max]="maxPrice"
+            max="1000000"
             step="1000"
             class="range-slider min-slider"
           />
           <input
             type="range"
             [(ngModel)]="maxPrice"
-            (ngModelChange)="onPriceChange()"
-            max="1000"
+            max="1000000"
             step="1000"
             class="range-slider max-slider"
           />
@@ -127,7 +124,7 @@
         <div class="sort-options">
           <button
             *ngFor="let option of sortOptions"
-            (click)="sortBy = option.value; onSortChange()"
+            (click)="sortBy = option.value;"
             class="sort-option-btn"
             type="button"
             [class.active]="sortBy === option.value"
@@ -150,7 +147,7 @@
         Reset All Filters
       </button>
       
-      <button (click)="toggleFilters()" class="btn-active px-6 py-3 min-w-1/2" type="button">
+      <button (click)="toggleFilters(); emitFilters()" class="btn-active px-6 py-3 min-w-1/2" type="button">
         <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>
         Apply Filters
       </button>

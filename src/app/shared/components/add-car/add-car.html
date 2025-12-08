@@ -99,6 +99,49 @@
       </div>
     </div>
 
+    <!-- Features -->
+    <div>
+      <label class="block text-sm font-medium text-slate-300 mb-2">
+        Features
+      </label>
+
+      <div class="flex gap-3">
+        <input
+          type="text"
+          [(ngModel)]="featureInput"
+          name="featureInput"
+          placeholder="e.g., Leather seats"
+          class="input flex-1 h-12"
+          (keyup.enter)="addFeature()"
+        />
+
+        <button
+          type="button"
+          (click)="addFeature()"
+          class="btn-active h-12 w-1/5"
+        >
+          Add
+        </button>
+      </div>
+
+      <!-- Features list -->
+      <div *ngIf="newCarForm.features.length > 0" class="flex flex-wrap gap-3 mt-4">
+        <span
+          *ngFor="let feature of newCarForm.features; let i = index"
+          class="flex items-center bg-slate-700 text-white px-3 py-1 rounded-xl text-sm border border-slate-600"
+        >
+          {{ feature }}
+          <button
+            type="button"
+            (click)="removeFeature(i)"
+            class="ml-2 text-red-400 hover:text-red-600"
+          >
+            ✕
+          </button>
+        </span>
+      </div>
+    </div>
+
     <!-- Image Upload -->
     <div>
       <label class="block text-sm font-medium text-slate-300 mb-2">
@@ -163,6 +206,12 @@
         <p class="text-slate-500 text-sm">No images selected</p>
         <p class="text-slate-600 text-xs mt-1">A default image will be used</p>
       </div>
+    </div>
+
+    <!-- Error Message -->
+    <div *ngIf="errorMessage" class="error-banner">
+      <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+      <span>{{ errorMessage }}</span>
     </div>
 
     <!-- Action Buttons -->

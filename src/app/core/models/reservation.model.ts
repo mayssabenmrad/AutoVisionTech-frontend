@@ -19,9 +19,9 @@ export interface ReservationsResponse {
   meta: {
     totalItems: number;
     itemCount: number;
-    itemsPerPage: string | number;
+    itemsPerPage: number;
     totalPages: number;
-    currentPage: string | number;
+    currentPage: number;
   };
 }
 
@@ -31,7 +31,6 @@ export interface CreateReservationDto {
   clientPhone: string;
   visitDate: string;
   visitTime: string;
-  status?: string;
 }
 
 export interface UpdateReservationDto {
@@ -44,10 +43,10 @@ export interface UpdateReservationDto {
 }
 
 export interface ReservationFilterDto {
-    clientPhone?: string;
-    minVisitDate?: string;
-    maxVisitDate?: string;
-    sortByVisitDate?: 'asc' | 'desc';
-    status?: string;
-    carId?: string;
+  clientPhone?: string;
+  minVisitDate?: string;
+  maxVisitDate?: string;
+  sortByVisitDate?: 'asc' | 'desc';
+  status?: string;
+  carId?: string;
 }

@@ -1,20 +1,9 @@
-import { Component } from '@angular/core';
+import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { AddCar } from '@shared/components/add-car/add-car';
-
-export interface Car {
-  id: string;
-  brand: string;
-  model: string;
-  year: number;
-  price: number;
-  kilometerAge: number;
-  condition: string;
-  status: 'available' | 'reserved' | 'sold';
-  description: string;
-  images: string[];
-}
+import { Car, CarsResponse } from 'src/app/core/models';
+import { CarService } from 'src/app/core/services/car.service';
 
 @Component({
   selector: 'app-manage-cars',
@@ -23,57 +12,10 @@ export interface Car {
   templateUrl: './manage-cars.html',
   styleUrls: ['./manage-cars.css']
 })
-export class ManageCars {
-  cars: Car[] = [
-    {
-      id: '1',
-      brand: 'BMW',
-      model: 'M4',
-      year: 2021,
-      price: 65000,
-      kilometerAge: 29500,
-      condition: 'Excellent',
-      status: 'available',
-      description: 'A high-performance coupe with an aggressive design.',
-      images: ['https://images.pexels.com/photos/358070/pexels-photo-358070.jpeg']
-    },
-    {
-      id: '2',
-      brand: 'Mercedes-Benz',
-      model: 'AMG GT',
-      year: 2022,
-      price: 120000,
-      kilometerAge: 15000,
-      condition: 'Excellent',
-      status: 'available',
-      description: 'Luxury sports car with exceptional performance.',
-      images: ['https://images.pexels.com/photos/337909/pexels-photo-337909.jpeg']
-    },
-    {
-      id: '3',
-      brand: 'Audi',
-      model: 'RS6',
-      year: 2020,
-      price: 95000,
-      kilometerAge: 42000,
-      condition: 'Good',
-      status: 'reserved',
-      description: 'High-performance wagon with plenty of space.',
-      images: ['https://images.pexels.com/photos/164634/pexels-photo-164634.jpeg']
-    },
-    {
-      id: '4',
-      brand: 'Porsche',
-      model: '911 Turbo',
-      year: 2023,
-      price: 180000,
-      kilometerAge: 5000,
-      condition: 'Excellent',
-      status: 'sold',
-      description: 'Iconic sports car with timeless design.',
-      images: ['https://images.pexels.com/photos/358070/pexels-photo-358070.jpeg']
-    }
-  ];
+export class ManageCars implements OnInit {
+  cars: Car[] = [];
+  isLoading = false;
+  errorMessage = '';
 
   // UI State
   showAddForm = false;
@@ -82,6 +24,35 @@ export class ManageCars {
     status: 'available' as 'available' | 'reserved' | 'sold',
     price: 0
   };
+
+  constructor(
+    private carService: CarService,
+    private cdr: ChangeDetectorRef
+  ) {}
+
+  ngOnInit(): void {
+    this.loadCars();
+  }
+
+  // Load all cars
+  async loadCars(): Promise<void> {
+    this.isLoading = true;
+    this.errorMessage = '';
+
+    this.carService.getCars().subscribe({
+      next: (cars: CarsResponse) => {
+        this.cars = cars.items || [];
+        this.isLoading = false;
+        this.cdr.detectChanges();
+      },
+      error: (err) => {
+        console.error('Error loading cars:', err);
+        this.errorMessage = 'Failed to load vehicles. Please try again later.';
+        this.isLoading = false;
+        this.cdr.detectChanges();
+      }
+    });
+  }
 
   get totalCars(): number {
     return this.cars.length;
@@ -104,10 +75,12 @@ export class ManageCars {
   }
 
   // Handle car added event
-  onCarAdded(car: Car): void {
-    this.cars.unshift(car);
+  async onCarAdded(car: Car): Promise<void> {
     this.showAddForm = false;
     alert(`Vehicle ${car.brand} ${car.model} has been added successfully with ${car.images.length} image(s)!`);
+    
+    // Reload cars to get the updated list
+    await this.loadCars();
   }
 
   // Handle add cancelled event
@@ -125,16 +98,31 @@ export class ManageCars {
   }
 
   // Handle save edit event
-  handleSaveEdit(carId: string): void {
-    const carIndex = this.cars.findIndex(c => c.id === carId);
-    if (carIndex !== -1) {
-      this.cars[carIndex] = {
-        ...this.cars[carIndex],
-        ...this.editForm
-      };
-    }
-    this.editingCarId = null;
-    this.editForm = { status: 'available', price: 0 };
+  async handleSaveEdit(carId: string): Promise<void> {
+    this.isLoading = true;
+    this.cdr.detectChanges();
+
+    this.carService.updateCar(carId, {
+      status: this.editForm.status,
+      price: this.editForm.price
+    }).subscribe({
+      next: (updatedCar: Car) => {
+        const index = this.cars.findIndex(c => c.id === carId);
+        if (index !== -1) {
+          this.cars[index] = updatedCar;
+        }
+        this.isLoading = false;
+        this.editingCarId = null;
+        alert(`Vehicle ${updatedCar.brand} ${updatedCar.model} has been updated successfully!`);
+        this.cdr.detectChanges();
+      },
+      error: (err) => {
+        console.error('Error updating car:', err);
+        alert('Failed to update vehicle. Please try again later.');
+        this.isLoading = false;
+        this.cdr.detectChanges();
+      }
+    });
   }
 
   // Handle cancel edit event
@@ -144,11 +132,33 @@ export class ManageCars {
   }
 
   // Handle delete car event
-  handleDeleteCar(carId: string): void {
-    const confirmDelete = confirm('Are you sure you want to delete this vehicle? This action cannot be undone.');
-    if (confirmDelete) {
-      this.cars = this.cars.filter(c => c.id !== carId);
-    }
+  async handleDeleteCar(carId: string): Promise<void> {
+    const car = this.cars.find(c => c.id === carId);
+    if (!car) return;
+
+    const confirmDelete = confirm(
+      `Are you sure you want to delete ${car.brand} ${car.model}? This action cannot be undone.`
+    );
+    
+    if (!confirmDelete) return;
+
+    this.isLoading = true;
+    this.cdr.detectChanges();
+
+    this.carService.deleteCar(carId).subscribe({
+      next: () => {
+        this.cars = this.cars.filter(c => c.id !== carId);
+        this.isLoading = false;
+        alert('Vehicle deleted successfully!');
+        this.cdr.detectChanges();
+      },
+      error: (err) => {
+        console.error('Error deleting car:', err);
+        alert('Failed to delete vehicle. Please try again later.');
+        this.isLoading = false;
+        this.cdr.detectChanges();
+      }
+    });
   }
 
   // Check if a car is currently being edited

@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
 import { CarCrad } from '../../shared/components/car-crad/car-crad';
 import { CarFilter, SearchFilters, SortByType } from '@shared/components/car-filter/car-filter';
 import { Hero } from "@shared/components/hero/hero";
@@ -18,7 +18,7 @@ export class MainPage implements OnInit {
   cars: Car[] = [];
   loading = true;
 
-  constructor(private carService: CarService) {}
+  constructor(private carService: CarService, private cdr: ChangeDetectorRef) {}
 
   ngOnInit(): void {
     this.loadCars();
@@ -29,8 +29,9 @@ export class MainPage implements OnInit {
     this.loading = true;
     this.carService.getCars(1, 100, filters).subscribe({
       next: (res: CarsResponse) => {
-        this.cars = res.items;
+        this.cars = [...res.items];
         this.loading = false;
+        this.cdr.detectChanges();
       },
       error: (err) => {
         console.error('Error loading cars:', err);
@@ -43,8 +44,8 @@ export class MainPage implements OnInit {
   onFiltersChanged(filters: SearchFilters) {
     const apiFilters: CarFilters = {};
 
-    if (filters.minPrice != null) apiFilters.minPrice = filters.minPrice.toString();
-    if (filters.maxPrice != null) apiFilters.maxPrice = filters.maxPrice.toString();
+    if (filters.minPrice != null) apiFilters.minPrice = filters.minPrice;
+    if (filters.maxPrice != null) apiFilters.maxPrice = filters.maxPrice;
 
     switch (filters.sortBy) {
       case 'price-asc': apiFilters.sortByPrice = 'asc'; break;
@@ -57,7 +58,7 @@ export class MainPage implements OnInit {
     if (filters.searchText) {
       apiFilters.brand = filters.searchText;
     }
-    console.log('Filters going to API:', apiFilters);
+
     this.loadCars(apiFilters);
   }
 }

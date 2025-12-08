@@ -80,11 +80,11 @@ export class AuthService {
     }
     return res.data || res.error; // renvoie soit Data soit Error
   }
-    /**
+
+  /**
    * Sign up a new user
    */
-
-    signUp(data: SignUpDto): Observable<SignUpResponse> {
+  signUp(data: SignUpDto): Observable<SignUpResponse> {
     return this.http.post<SignUpResponse>(`${this.apiUrl}/api/auth/sign-up/email`, data, {
       withCredentials: true,
     });
