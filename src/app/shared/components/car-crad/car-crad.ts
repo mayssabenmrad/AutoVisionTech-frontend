@@ -1,5 +1,6 @@
-import { Component } from '@angular/core';
+import { Component, Input } from '@angular/core';
 import { RouterLink } from "@angular/router";
+import { Car } from 'src/app/core/models';
 
 @Component({
   selector: 'app-car-crad',
@@ -9,5 +10,5 @@ import { RouterLink } from "@angular/router";
   standalone: true,
 })
 export class CarCrad {
-
+  @Input() car!: Car;
 }
