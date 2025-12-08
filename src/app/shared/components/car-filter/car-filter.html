@@ -9,7 +9,7 @@
       <input
         type="text"
         [(ngModel)]="searchText"
-        (ngModelChange)="onSearchChange()"
+        (keyup.enter)="onSearchChange()"
         placeholder="Search by brand"
         class="input"
       />

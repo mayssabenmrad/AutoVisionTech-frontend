@@ -62,7 +62,9 @@ export class CarFilter implements OnInit {
     this.showFilters = !this.showFilters;
   }
 
-  onSearchChange(): void { console.log('Search text changed:', this.searchText); }
+  onSearchChange(): void { 
+    this.emitFilters();
+  }
 
   setQuickPriceFilter(min: number, max: number): void {
     this.minPrice = min;

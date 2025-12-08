@@ -87,7 +87,7 @@ export class Signin {
     }
 
     this.isLoading = true;
-    this.errorMessage = '';
+    this.clearErrors();
     this.cdr.detectChanges(); // Force UI update
 
     try {
@@ -121,7 +121,7 @@ export class Signin {
       
       // Effacer le message après 5 secondes
       setTimeout(() => {
-        this.errorMessage = '';
+        this.clearErrors();
         this.cdr.detectChanges();
       }, 5000);
 
