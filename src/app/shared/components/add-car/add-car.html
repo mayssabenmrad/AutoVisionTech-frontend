@@ -99,6 +99,49 @@
       </div>
     </div>
 
+    <!-- Features -->
+    <div>
+      <label class="block text-sm font-medium text-slate-300 mb-2">
+        Features
+      </label>
+
+      <div class="flex gap-3">
+        <input
+          type="text"
+          [(ngModel)]="featureInput"
+          name="featureInput"
+          placeholder="e.g., Leather seats"
+          class="input flex-1 h-12"
+          (keyup.enter)="addFeature()"
+        />
+
+        <button
+          type="button"
+          (click)="addFeature()"
+          class="btn-active h-12 w-1/5"
+        >
+          Add
+        </button>
+      </div>
+
+      <!-- Features list -->
+      <div *ngIf="newCarForm.features.length > 0" class="flex flex-wrap gap-3 mt-4">
+        <span
+          *ngFor="let feature of newCarForm.features; let i = index"
+          class="flex items-center bg-slate-700 text-white px-3 py-1 rounded-xl text-sm border border-slate-600"
+        >
+          {{ feature }}
+          <button
+            type="button"
+            (click)="removeFeature(i)"
+            class="ml-2 text-red-400 hover:text-red-600"
+          >
+            ✕
+          </button>
+        </span>
+      </div>
+    </div>
+
     <!-- Image Upload -->
     <div>
       <label class="block text-sm font-medium text-slate-300 mb-2">
