@@ -150,24 +150,23 @@ export class ManageCars implements OnInit {
     
     if (!confirmDelete) return;
 
-    try {
-      this.isLoading = true;
-      
-      await this.carService.deleteCar(carId);
-      
-      // Remove from local state
-      this.cars = this.cars.filter(c => c.id !== carId);
-      
-      alert('Vehicle deleted successfully!');
-      this.cdr.detectChanges();
+    this.isLoading = true;
+    this.cdr.detectChanges();
 
-    } catch (error: any) {
-      console.error('Error deleting car:', error);
-      alert(error?.message || 'Failed to delete vehicle');
-    } finally {
-      this.isLoading = false;
-      this.cdr.detectChanges();
-    }
+    this.carService.deleteCar(carId).subscribe({
+      next: () => {
+        this.cars = this.cars.filter(c => c.id !== carId);
+        this.isLoading = false;
+        alert('Vehicle deleted successfully!');
+        this.cdr.detectChanges();
+      },
+      error: (err) => {
+        console.error('Error deleting car:', err);
+        alert('Failed to delete vehicle. Please try again later.');
+        this.isLoading = false;
+        this.cdr.detectChanges();
+      }
+    });
   }
 
   // Check if a car is currently being edited
