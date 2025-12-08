@@ -149,13 +149,13 @@
                   <option value="sold">Sold</option>
                 </select>
 
-                <span
+                <p
                   *ngIf="!isEditing(car.id)"
-                  class="px-3 py-1 rounded-full text-xs border capitalize"
+                  class="px-3 py-1 rounded-full text-xs border capitalize w-full text-center font-medium"
                   [ngClass]="getStatusColor(car.status)"
                 >
                   {{ car.status }}
-                </span>
+                </p>
               </td>
 
               <!-- Actions -->
