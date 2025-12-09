@@ -19,9 +19,9 @@
       <div class="hidden md:flex items-center gap-4">
         <button 
           routerLink="/"
-          [ngClass]="{'btn-active': isActivePage('catalogue')}"
+          [ngClass]="{'btn-active': isActivePage('catalog')}"
           class="btn-common"
-          (click)="currentPage='catalogue'"
+          (click)="currentPage='catalog'"
         >
           Catalog
         </button>
@@ -60,7 +60,11 @@
         </button>
 
         <!-- User Info -->
-        <div *ngIf="(currentUser$ | async) as currentUser" class="flex items-center gap-20 ml-4 pl-4 border-l border-slate-700">
+        <div 
+          *ngIf="(currentUser$ | async) as currentUser" 
+          class="flex items-center gap-20 ml-4 pl-4 border-l border-slate-700 cursor-pointer"
+          routerLink="/profile"
+          >
           <div class="flex items-center gap-3">
             <img
               [src]="currentUser.image?.length ? currentUser.image : 'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=100&h=100&fit=crop'"
@@ -127,7 +131,7 @@
           'text-slate-300 hover:bg-slate-700': !isActivePage('catalogue')
         }"
         class="w-full text-left px-4 py-2 rounded-lg"
-        (click)="currentPage='catalogue'"
+        (click)="currentPage='catalog'"
         >
         Catalog
       </button>
