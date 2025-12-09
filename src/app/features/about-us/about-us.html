@@ -9,7 +9,7 @@
   <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 space-y-16">
     
     <!-- Our Story Section -->
-    <section class="story-section">
+    <section class="relative">
       <div class="grid lg:grid-cols-2 gap-12 items-center">
         <div class="story-content">
           <h2 class="section-title">Our Story</h2>
@@ -37,7 +37,7 @@
     </section>
 
     <!-- Stats Section -->
-    <section class="stats-section">
+    <section class="relative">
       <div class="grid grid-cols-2 lg:grid-cols-4 gap-6">
         <div *ngFor="let stat of stats" class="stat-card text-center">
           <div class="stat-icon-wrapper mx-auto mb-4">
@@ -52,7 +52,7 @@
     </section>
 
     <!-- Our Values Section -->
-    <section class="values-section">
+    <section class="relative">
       <h2 class="section-title text-center mb-12">Our Core Values</h2>
       <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
         <app-info-card 
@@ -65,7 +65,7 @@
     </section>
 
     <!-- Mission & Vision Section -->
-    <section class="mission-vision-section">
+    <section class="relative">
       <div class="grid lg:grid-cols-2 gap-8">
         <div class="mission-card">
           <div class="card-icon-wrapper mb-6">
@@ -95,18 +95,18 @@
     </section>
 
     <!-- Team Section -->
-    <section class="team-section">
+    <section class="relative">
       <h2 class="section-title text-center mb-12">Meet Our Leadership</h2>
       <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
         <div *ngFor="let member of team" class="team-card">
-          <div class="team-image-wrapper">
+          <div class="relative overflow-hidden aspect-square">
             <img 
               [src]="member.image" 
               [alt]="member.name" 
-              class="team-image"
+              class="w-full h-full object-cover transition-transform duration-500 hover:scale-110"
             />
           </div>
-          <div class="team-info">
+          <div class="p-6">
             <h4 class="text-lg font-semibold text-white mb-1">{{ member.name }}</h4>
             <p class="text-blue-400 text-sm mb-3">{{ member.role }}</p>
             <p class="text-slate-400 text-sm">{{ member.bio }}</p>
@@ -116,7 +116,7 @@
     </section>
 
     <!-- CTA Section -->
-    <section class="cta-section">
+    <section class="relative">
       <div class="cta-content">
         <h2 class="text-3xl font-bold text-white mb-4 text-center">Ready to Experience Excellence?</h2>
         <p class="text-slate-300 text-center mb-8 max-w-2xl mx-auto">

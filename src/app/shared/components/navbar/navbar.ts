@@ -45,7 +45,8 @@ export class Navbar {
         else if (url.includes('manage-cars')) this.currentPage = 'manage-cars';
         else if (url.includes('manage-reservations')) this.currentPage = 'manage-reservations';
         else if (url.includes('profile')) this.currentPage = 'profile-page';
-        else this.currentPage = 'catalog';
+        else if (url === '/') this.currentPage = 'catalog';
+        else this.currentPage = '';
       }
     });
   }
