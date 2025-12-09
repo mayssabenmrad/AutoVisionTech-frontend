@@ -51,6 +51,5 @@ export class CarDetails {
         ? this.selectedImageIndex + 1 
         : 0;
     }
-
   }
 }

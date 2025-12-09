@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, Output } from '@angular/core';
+import { ChangeDetectorRef, Component, EventEmitter, Input, Output } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { CarComment } from 'src/app/core/models';
@@ -17,7 +17,8 @@ export class Comments {
   @Input() carId!: string;
   @Output() commentAdded = new EventEmitter<void>(); // Change: emit just a refresh signal
 
-  constructor(private commentService: CommentService) {}
+  constructor(private commentService: CommentService, private cdr: ChangeDetectorRef) {}
+
   isSubmitting: boolean = false;
 
   // Message properties
@@ -59,6 +60,7 @@ export class Comments {
     }
 
     this.isSubmitting = true;
+    this.cdr.detectChanges(); // Update UI
 
     this.commentService.addComment({
       name: this.commentForm.name, 
@@ -67,18 +69,18 @@ export class Comments {
     }).subscribe({
       next: (response) => {
         this.displayMessage('success', 'Comment submitted successfully!');
-        
-        // Emit a signal for the parent to reload comments
-        this.commentAdded.emit();
-        
         // Reset form
         this.commentForm.name = '';
         this.commentForm.content = '';
         this.isSubmitting = false;
+        this.cdr.detectChanges(); // Update UI
+        this.commentAdded.emit(); // Emit event to notify parent component
       },
       error: (error) => {
         this.displayMessage('error', error.error?.message || 'Failed to submit comment.');
         this.isSubmitting = false;
+        this.cdr.detectChanges(); // Update UI
+        this.commentAdded.emit(); // Emit event to notify parent component
       }
     });
   }

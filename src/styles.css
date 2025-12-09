@@ -332,6 +332,17 @@ button:active {
 }
 
 /* ============================================
+    SUCCESS HANDLING
+   ============================================ */
+.success-banner {
+  @apply p-4 mb-6 rounded-xl;
+  @apply bg-green-500/10 border border-green-500/30;
+  @apply text-green-400 text-sm;
+
+  animation: fadeIn 0.4s ease-out;
+}
+
+/* ============================================
     FORM ELEMENTS
    ============================================ */
 .form-group {

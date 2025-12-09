@@ -52,7 +52,7 @@
         </h1>
         <p class="text-slate-400 leading-relaxed">{{ car.description }}</p>
       </div>
-      <span [ngClass]="['status-badge', getStatusColor(car.status)]">
+      <span [ngClass]="['status-badge', getStatusColor(car.status), 'w-25 text-center']">
         {{ car.status }}
       </span>
     </div>
@@ -119,14 +119,14 @@
   </div>
 
   <!-- Features Section -->
-  <div class="features-card mt-2">
+  <div class="features-card mt-2" *ngIf="car.features && car.features.length">
     <h2 class="section-title">
       <svg class="w-5 h-5 text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
       </svg>
       Key Features
     </h2>
-    <div class="features">
+    <div class="features-grid">
       <div 
       class="feature-item" 
       *ngFor="let feature of car.features"

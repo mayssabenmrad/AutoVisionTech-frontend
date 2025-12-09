@@ -109,7 +109,7 @@
           <!-- Car Image -->
           <div class="w-full lg:w-48 h-32 rounded-lg overflow-hidden flex-shrink-0" *ngIf="getCarInfo(reservation) as car">
             <img
-              [src]="car.images && car.images.length > 0 ? car.images[0] : 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcREuAKJP5WVqd4aJioQu7hJlZfr77fXfCAjeQ&s'"
+              [src]="car.images && car.images.length > 0 ? car.images[0] : '/defaultcar.jpg'"
               [alt]="car.brand + ' ' + car.model"
               class="w-full h-full object-cover"
             />

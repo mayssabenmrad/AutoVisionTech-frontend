@@ -78,7 +78,6 @@ export class ReservationService {
     return this.http.post<Reservation>(
       `${this.apiUrl}/${carId}`,
       data,
-      { withCredentials: true }
     );
   }
 

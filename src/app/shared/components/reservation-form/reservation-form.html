@@ -2,12 +2,19 @@
   <h3 class="text-xl font-semibold text-white">Book Appointment</h3>
 
   <!-- If available -->
-  <ng-container *ngIf="carStatus === 'available'">
+  <ng-container *ngIf="car.status === 'available'">
     
     <!-- Schedule Visit Button -->
     <button *ngIf="!showReservationForm" (click)="toggleForm()" class="btn-active h-10 w-full mb-4">
       Schedule Visit
     </button>
+
+    <!-- Success Message -->
+    <div *ngIf="showMessage && message.type === 'success'" class="success-banner">
+      <p class="text-center">
+        {{ message.text }}
+      </p>
+    </div>
 
     <!-- Form -->
     <form *ngIf="showReservationForm" (ngSubmit)="onSubmit()" class="space-y-4">
@@ -67,21 +74,27 @@
         </div>
       </div>
 
+    <!-- Error Message -->
+    <div *ngIf="showMessage && message.type === 'error'" class="error-banner">
+      <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+      <span>{{ message.text }}</span>
+    </div>
+
       <!-- Cancel and Confirm Buttons -->
       <div class="flex gap-3">
         <button type="button" (click)="onCancel()" class="default-btn h-10 w-1/2">Cancel</button>
-        <button type="submit" class="btn-active h-10 w-1/2">Confirm</button>
+        <button type="submit" class="btn-active h-10 w-1/2" [disabled]="!isFormValid()">Confirm</button>
       </div>
     </form>
 
   </ng-container>
 
   <!-- If unavailable -->
-  <div *ngIf="carStatus !== 'available'">
+  <div *ngIf="car.status !== 'available'">
     <div class="unavailable-icon">
       <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg>
     </div>
-    <p class="text-slate-400 text-center">This vehicle is currently <span>{{ carStatus }}</span></p>
+    <p class="text-slate-400 text-center">This vehicle is currently <span>{{ car.status }}</span></p>
   </div>
 
   <!-- Contact Section -->

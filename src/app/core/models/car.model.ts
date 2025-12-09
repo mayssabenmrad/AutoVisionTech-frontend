@@ -20,7 +20,6 @@ export interface Car{
   updatedAt: string;
   comments?: CarComment[];
   reservations?: Reservation[];
-  avgRating?: number;
   totalComments?: number;
 }
 

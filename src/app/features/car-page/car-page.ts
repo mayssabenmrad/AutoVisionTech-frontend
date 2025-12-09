@@ -1,12 +1,11 @@
-import { Component } from '@angular/core';
+import { ChangeDetectorRef, Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { CarDetails } from '@shared/components/car-details/car-details';
 import { Comments } from '@shared/components/comments/comments';
 import { ReservationForm } from '@shared/components/reservation-form/reservation-form';
-import { ActivatedRoute, Router } from '@angular/router';
+import { ActivatedRoute } from '@angular/router';
 import { CarService } from 'src/app/core/services/car.service';
 import { Car, CreateReservationDto } from 'src/app/core/models';
-import { ReservationService } from 'src/app/core/services/reservation.service';
 
 @Component({
   selector: 'app-car-page',
@@ -18,15 +17,12 @@ import { ReservationService } from 'src/app/core/services/reservation.service';
 export class CarPage {
   car: Car | null = null;
   carId: string = '';
-  alertMessage: string = '';
-  alertType: 'success' | 'error' = 'success';
-  showAlert: boolean = false;
   reservationData: CreateReservationDto | null = null;
 
   constructor(
     private route: ActivatedRoute,
     private carService: CarService,
-    private reservationService: ReservationService
+    private cdr: ChangeDetectorRef
   ) {}
 
   ngOnInit(): void {
@@ -47,7 +43,6 @@ export class CarPage {
       });
   }
 
-  //after adding a comment
   // After a comment is added
   onCommentAdded() {
     // Reload only the product to get updated comments
@@ -58,16 +53,7 @@ export class CarPage {
           this.car.comments = updatedCar.comments;
           this.car.totalComments = updatedCar.totalComments;
         }
+        this.cdr.detectChanges(); // Update UI
       });
-  }
-  //to display alert messages
-  showStyledAlert(message: string, type: 'success' | 'error') {
-    this.alertMessage = message;
-    this.alertType = type;
-    this.showAlert = true;
-
-    setTimeout(() => {
-      this.showAlert = false;
-    }, 3000);
   }
 }

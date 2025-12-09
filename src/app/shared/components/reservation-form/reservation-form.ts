@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core';
+import { ChangeDetectorRef, Component, Input } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { Car, CreateReservationDto } from 'src/app/core/models';
@@ -13,8 +13,6 @@ import { ReservationService } from 'src/app/core/services/reservation.service';
 })
 export class ReservationForm {
   @Input() car: Car | null = null;
-  // Car status
-  carStatus: 'available' | 'reserved' | 'sold' = 'available';
   
   // Show/hide the form
   showReservationForm = false;
@@ -23,7 +21,7 @@ export class ReservationForm {
   isHiding = false;
 
 
-  constructor(private reservationService: ReservationService) {}
+  constructor(private reservationService: ReservationService, private cdr: ChangeDetectorRef) {}
   // Reservation form
   reservationForm: CreateReservationDto = {
     clientName: '',
@@ -31,7 +29,6 @@ export class ReservationForm {
     clientPhone: '',
     visitDate: '',
     visitTime: '',
-    status: 'pending',
   };
 
   // Toggle the form
@@ -44,38 +41,25 @@ export class ReservationForm {
 
   // Submit the reservation
   onSubmit(): void {
-    if(this.car && this.reservationForm){
-        console.log(" Reservation data sent to API:", this.reservationForm);
-       console.log("Car ID:", this.car.id);
-      this.reservationService.createReservation(this.reservationForm, this.car.id)
+    if (!this.car || !this.isFormValid()) return;
+
+    this.reservationService
+      .createReservation(this.reservationForm, this.car.id)
       .subscribe({
-        next: (response) => {
-        this.message = { type: 'success', text: 'Reservation added successfully!' };
-        this.showMessage = true;
-        this.isHiding = false;
-
-        setTimeout(() => {
-          this.isHiding = true;
-          setTimeout(() => {
-            this.showMessage = false;
-          }, 500);
-        }, 5000);
-      },
-      error: (error) => {
-        this.message = { type: 'error', text: error.error?.message || 'Failed to add reservation' };
-        this.showMessage = true;
-        this.isHiding = false;
-
-        setTimeout(() => {
-          this.isHiding = true;
-          setTimeout(() => {
-            this.showMessage = false;
-          }, 500);
-        }, 5000);
-      },
-    });
-
-    }
+        next: () => {
+          this.displayMessage('success', 'Reservation added successfully!');
+          this.resetForm();
+          this.showReservationForm = false; // hide form after submission
+          this.cdr.detectChanges(); // Update UI
+        },
+        error: (error) => {
+          this.displayMessage(
+            'error',
+            error.error?.message || 'Failed to add reservation'
+          );
+          this.cdr.detectChanges(); // Update UI
+        },
+      });
   }
 
   // Cancel the reservation
@@ -85,7 +69,7 @@ export class ReservationForm {
   }
 
   // Check if the form is valid
-  private isFormValid(): boolean {
+  isFormValid(): boolean {
     return !!(
       this.reservationForm.clientName.trim() &&
       this.reservationForm.clientEmail.trim() &&
@@ -103,8 +87,21 @@ export class ReservationForm {
       clientPhone: '',
       visitDate: '',
       visitTime: '',
-      status:'pending',
     };
+  }
+
+  private displayMessage(type: 'success' | 'error', text: string) {
+    this.message = { type, text };
+    this.showMessage = true;
+    this.isHiding = false;
+
+    setTimeout(() => {
+      this.isHiding = true;
+      setTimeout(() => {
+        this.showMessage = false;
+        this.cdr.detectChanges(); // Update UI
+      }, 500);
+    }, 3000);
   }
 
   // Minimum date (today)

@@ -74,7 +74,7 @@
 
 /* Info Card */
 .info-card {
-  @apply bg-[var(--color-dashboard-card)] rounded-2xl p-6 border border-slate-700;
+  @apply bg-[var(--color-dashboard-card)] rounded-2xl p-6 border border-slate-700 mt-2;
 }
 
 /* Specifications Grid */
