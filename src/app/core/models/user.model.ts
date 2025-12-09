@@ -41,3 +41,10 @@ export interface ChangePasswordDto {
 }
 
 export type ProfileUpdateResponse = User;
+
+export interface CreateUserDto {
+  name: string;
+  email: string;
+  password: string;
+  role: 'admin' | 'agent';
+}

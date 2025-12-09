@@ -1,10 +1,9 @@
-import { Component, OnInit } from '@angular/core';
+import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { User } from 'src/app/core/models';
+import { CreateUserDto, User } from 'src/app/core/models';
 import { UserService } from 'src/app/core/services/user.service';
 import { AuthService } from 'src/app/core/services/auth.service';
-import { HttpClient } from '@angular/common/http';
 
 @Component({
   selector: 'app-admin-panel',
@@ -19,40 +18,29 @@ export class AdminPanel implements OnInit {
   // Edit state
   editingUser: string | null = null;
   editForm: Partial<User> = {};
-  currentUserId: string | null = null;
+  currentUserId!: string;
 
   // Add user modal
   showAddModal = false;
-  newUserForm = {
+  newUserForm: CreateUserDto = {
     name: '',
     email: '',
     password: '',
     role: 'agent' as 'admin' | 'agent',
-    image: ''
   };
 
   constructor(
-    private http: HttpClient,
-    private authService: AuthService,
-    private userService: UserService
+    private userService: UserService,
+    private cdr: ChangeDetectorRef,
+    private authService: AuthService
   ) {}
 
   ngOnInit() {
-    this.authService.user$.subscribe((user) => {
-      if (user) {
-        this.currentUserId = user.id;
-      }
+    this.authService.user$.subscribe(user => {
+      if (!user) return;
+      this.currentUserId = user.id; // Get current admin user ID
+      this.loadUsers(); // Load users after getting current user ID
     });
-
-    this.loadUsers();
-  }
-
-    loadCurrentUser() {
-    // Retrieve the current user from localStorage or your authentication service
-    const currentUser = localStorage.getItem('currentUser');
-    if (currentUser) {
-      this.currentUserId = JSON.parse(currentUser).id;
-    }
   }
 
   async loadUsers() {
@@ -62,6 +50,7 @@ export class AdminPanel implements OnInit {
         next: (response) => {
           // Exclude the current admin user from the list
           this.users = response.items.filter((user) => user.id !== this.currentUserId);
+          this.cdr.detectChanges();
         },
         error: (error) => {
           console.error('Erreur lors du chargement des utilisateurs:', error);
@@ -113,20 +102,22 @@ export class AdminPanel implements OnInit {
   handleSaveEdit(user: User): void {
     //edit role
     if(this.editForm.role){
-    this.userService.updateUserRole(user.id, this.editForm.role).subscribe({
-    next: updated => {
-      user.role = updated.role;
-    },
-    error: () => alert('Failed to update role')
-    });
+      this.userService.updateUserRole(user.id, this.editForm.role).subscribe({
+        next: updated => {
+          user.role = updated.role;
+          this.cdr.detectChanges();
+        },
+        error: () => alert('Failed to update role')
+      });
 
-    //edit status
-    this.userService.updateActivateUser(user.id, !user.isActive).subscribe({
-    next: updated => {
-      user.isActive = updated.isActive;
-    },
-    error: () => alert('Failed to update status')
-    });
+      //edit status
+      this.userService.updateActivateUser(user.id, !user.isActive).subscribe({
+        next: updated => {
+          user.isActive = updated.isActive;
+          this.cdr.detectChanges();
+        },
+        error: () => alert('Failed to update status')
+      });
     }
 
     this.editingUser = null;
@@ -147,20 +138,21 @@ export class AdminPanel implements OnInit {
   // Delete user
   handleDeleteUser(userId: string): void {
     if(this.users){
-          const user = this.users.find(u => u.id === userId);
-    if (!user) return;
+      const user = this.users.find(u => u.id === userId);
+      if (!user) return;
 
-    if (confirm(`Delete user ${user.name}?`)) {
-      this.userService.deleteUser(userId).subscribe({
-        next: () => {
-          if(this.users)
-          this.users = this.users.filter(u => u.id !== userId);
-        },
-        error: () => alert("Failed to delete user")
-      });
-     }
-   }
-}
+      if (confirm(`Delete user ${user.name}?`)) {
+        this.userService.deleteUser(userId).subscribe({
+          next: () => {
+            if(this.users)
+            this.users = this.users.filter(u => u.id !== userId);
+            this.cdr.detectChanges();
+          },
+          error: () => alert("Failed to delete user")
+        });
+      }
+    }
+  }
 
   // Open add user modal
   openAddModal(): void {
@@ -176,13 +168,17 @@ export class AdminPanel implements OnInit {
   // Add new user
   handleAddUser(): void {
     if (!this.isNewUserFormValid()) return alert("Invalid data");
-    this.authService.signUp(this.newUserForm).subscribe({
-      next: (newUser) => {
+    this.userService.createUser(this.newUserForm).subscribe({
+      next: (createdUser) => {
+        if(this.users){
+          this.users.push(createdUser);
+          this.cdr.detectChanges();
+        }
         this.closeAddModal();
-        alert(`User ${newUser.user.name} added successfully!`);
       },
-      error: () => alert("Failed to add user")
+      error: () => alert("Failed to create user")
     });
+    this.closeAddModal();
   }
 
   // Check if new user form is valid
@@ -206,7 +202,6 @@ export class AdminPanel implements OnInit {
       email: '',
       password: '',
       role: 'agent',
-      image: ''
     };
   }
 

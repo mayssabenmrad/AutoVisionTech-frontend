@@ -31,7 +31,8 @@
           [ngClass]="{'btn-active': isActivePage('manage-reservations')}"
           class="btn-common"
           (click)="currentPage='manage-reservations'"
-          *ngIf="(isAgent$ && isActive$) | async"
+          *ngIf="(currentUser$ | async) as user" 
+          [hidden]="user.role !== 'agent' || !user.isActive"
         >
           Reservations
         </button>
@@ -41,7 +42,8 @@
           [ngClass]="{'btn-active': isActivePage('manage-cars')}"
           class="btn-common"
           (click)="currentPage='manage-cars'"
-          *ngIf="(isAgent$ && isActive$) | async"
+          *ngIf="(currentUser$ | async) as user" 
+          [hidden]="user.role !== 'agent' || !user.isActive"
         >
           Manage Cars
         </button>
@@ -51,13 +53,14 @@
           [ngClass]="{'btn-active': isActivePage('admin-panel')}"
           class="btn-common"
           (click)="currentPage='admin-panel'"
-          *ngIf="(isAdmin$ && isActive$) | async"
+          *ngIf="(currentUser$ | async) as user"
+          [hidden]="user.role !== 'admin' || !user.isActive"
         >
           Admin Panel
         </button>
 
         <!-- User Info -->
-        <div *ngIf="currentUser" class="flex items-center gap-20 ml-4 pl-4 border-l border-slate-700">
+        <div *ngIf="(currentUser$ | async) as currentUser" class="flex items-center gap-20 ml-4 pl-4 border-l border-slate-700">
           <div class="flex items-center gap-3">
             <img
               [src]="currentUser.image?.length ? currentUser.image : 'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=100&h=100&fit=crop'"
@@ -78,7 +81,7 @@
         </div>
 
         <!-- Auth Buttons (when not logged in) -->
-        <div *ngIf="!currentUser" class="flex items-center gap-3 ml-4 pl-4 border-l border-slate-700">
+        <div *ngIf="!(currentUser$ | async)" class="flex items-center gap-3 ml-4 pl-4 border-l border-slate-700">
           <button 
             routerLink="/signin"
             class="default-btn px-5 py-2.5 flex items-center gap-2"
@@ -115,7 +118,6 @@
   <!-- Mobile Navigation -->
   <div 
     *ngIf="mobileMenuOpen" 
-    [@fadeIn]
     class="md:hidden backdrop-blur-xl bg-[#131820] bg-opacity-95 border-t border-slate-700 border-opacity-50">
     <div class="px-4 py-4 space-y-2">
       <button 
@@ -137,7 +139,8 @@
         }"
         class="w-full text-left px-4 py-2 rounded-lg"
         (click)="currentPage='manage-reservations'"
-        *ngIf="(isAgent$ && isActive$) | async"
+        *ngIf="(currentUser$ | async) as user; else: null"
+        [hidden]="user.role !== 'agent' || !user.isActive"
         >
         Reservations
       </button>
@@ -149,7 +152,8 @@
         }"
         class="w-full text-left px-4 py-2 rounded-lg"
         (click)="currentPage='manage-cars'"
-        *ngIf="(isAgent$ && isActive$) | async"
+        *ngIf="(currentUser$ | async) as user; else: null"
+        [hidden]="user.role !== 'agent' || !user.isActive"
         >
         Manage Cars
       </button>
@@ -161,7 +165,8 @@
         }"
         class="w-full text-left px-4 py-2 rounded-lg"
         (click)="currentPage='admin-panel'"
-        *ngIf="(isAdmin$ && isActive$) | async"
+        *ngIf="(currentUser$ | async) as user; else: null"
+        [hidden]="user.role !== 'admin' || !user.isActive"
         >
         Admin Panel
       </button>
@@ -169,7 +174,7 @@
         routerLink="/signin"
         class="w-full text-left px-4 py-2 bg-blue-600 text-white rounded-lg"
         (click)="currentPage='signin'"
-        *ngIf="!currentUser"
+        *ngIf="!(currentUser$ | async)"
         >
         Sign In
       </button>
@@ -177,14 +182,14 @@
         routerLink="/signup"
         class="w-full text-left px-4 py-2 bg-green-600 text-white rounded-lg"
         (click)="currentPage='signup'"
-        *ngIf="!currentUser"
+        *ngIf="!(currentUser$ | async)"
         >
         Sign Up
       </button>
       <button 
         (click)="signOut()"
         class="w-full text-left px-4 py-2 bg-red-600 text-white rounded-lg"
-        *ngIf="currentUser"
+        *ngIf="(currentUser$ | async)"
         >
         Logout
       </button>
