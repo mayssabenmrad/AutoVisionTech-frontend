@@ -21,7 +21,7 @@ export class Navbar {
   isActive$: Observable<boolean>;
 
   mobileMenuOpen = false;
-  currentPage = 'catalogue';
+  currentPage = 'catalog';
   
   currentUser$: Observable<User | null>;
 
@@ -44,7 +44,8 @@ export class Navbar {
         if (url.includes('admin-panel')) this.currentPage = 'admin-panel';
         else if (url.includes('manage-cars')) this.currentPage = 'manage-cars';
         else if (url.includes('manage-reservations')) this.currentPage = 'manage-reservations';
-        else this.currentPage = 'catalogue';
+        else if (url.includes('profile')) this.currentPage = 'profile-page';
+        else this.currentPage = 'catalog';
       }
     });
   }
@@ -56,7 +57,7 @@ export class Navbar {
 
   async signOut(): Promise<void> {
     await this.authService.logout();
-    this.currentPage = 'catalogue';
+    this.currentPage = 'catalog';
   }
 
   // Check Active Page

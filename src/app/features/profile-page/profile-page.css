@@ -1,0 +1,71 @@
+@tailwind utilities;
+@import "tailwindcss";
+
+/* Profile Picture Section */
+.profile-picture-default {
+  @apply w-32 h-32 rounded-2xl flex items-center justify-center shadow-xl;
+  background: linear-gradient(135deg, #3b82f6, #06b6d4);
+  box-shadow: var(--shadow-glow-blue);
+}
+
+/* Badge Variants */
+.badge-admin {
+  @apply bg-yellow-500/10 text-yellow-400 border-yellow-500/50;
+}
+
+.badge-agent {
+  @apply bg-blue-500/10 text-blue-400 border-blue-500/50;
+}
+
+.badge-client {
+  @apply bg-green-500/10 text-green-400 border-green-500/50;
+}
+
+/* Form */
+.form-display {
+  @apply px-4 py-3 rounded-xl text-white;
+  @apply bg-slate-800/30 border border-slate-700/50;
+}
+
+.form-display-readonly {
+  @apply px-4 py-3 rounded-xl text-slate-400 capitalize;
+  @apply bg-slate-800/30 border border-slate-700/50;
+}
+
+.stat-row {
+  @apply flex items-center justify-between;
+}
+
+.security-card {
+  background: linear-gradient(135deg, 
+    rgba(37, 99, 235, 0.1), 
+    rgba(6, 182, 212, 0.1)
+  );
+  @apply border-blue-500/30;
+}
+
+/* Danger Zone */
+.danger-zone {
+  @apply mt-8 backdrop-blur-xl rounded-2xl border overflow-hidden;
+  @apply border-red-500/30;
+  background: linear-gradient(135deg, 
+    rgba(220, 38, 38, 0.1), 
+    rgba(239, 68, 68, 0.1)
+  );
+}
+
+/* Modal Danger Specific */
+.modal-danger-icon {
+  @apply inline-flex items-center justify-center w-12 h-12 mb-4 rounded-full;
+  @apply bg-red-500/10 text-red-400;
+}
+
+.modal-body {
+  @apply p-6 space-y-4;
+}
+
+.hidden {
+  @apply invisible absolute;
+  width: 0;
+  height: 0;
+}
