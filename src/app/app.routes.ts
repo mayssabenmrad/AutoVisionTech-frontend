@@ -9,6 +9,7 @@ import { CarPage } from './features/car-page/car-page';
 import { ProfilePage } from './features/profile-page/profile-page';
 import { AboutUs } from './features/about-us/about-us';
 import { Services } from './features/services/services';
+import { Financing } from './features/financing/financing';
 
 export const routes: Routes = [
   { path: '', component: MainPage },
@@ -21,5 +22,6 @@ export const routes: Routes = [
   { path: 'profile', component: ProfilePage },
   { path: 'about-us', component: AboutUs},
   { path: 'services', component: Services},
+  { path: 'financing', component: Financing},
   { path: '**', redirectTo: '' },
 ];
