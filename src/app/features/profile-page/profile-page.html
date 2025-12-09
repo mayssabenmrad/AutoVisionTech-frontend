@@ -1,4 +1,4 @@
-<div class="min-h-screen relative">
+<div class="min-h-screen relative" *ngIf="currentUser">
   <!-- Hero Section using component -->
   <app-hero 
     [heroName]="'My Profile'" 
@@ -30,7 +30,7 @@
           <img 
             *ngIf="formData().imagePreview; else defaultAvatar"
             [src]="formData().imagePreview" 
-            [alt]="currentUser().name"
+            [alt]="currentUser.name"
             class="w-32 h-32 rounded-2xl object-cover border-4 border-slate-700/50 shadow-xl">
           <ng-template #defaultAvatar>
             <div class="profile-picture-default">
@@ -55,10 +55,10 @@
 
         <div class="flex-1">
           <div *ngIf="!isEditing()">
-            <h3 class="text-2xl font-bold text-white mb-2">{{ currentUser().name }}</h3>
-            <p class="text-slate-400 mb-2">{{ currentUser().email }}</p>
-            <span [ngClass]="'badge-' + currentUser().role" class="status-badge">
-              {{ currentUser().role }}
+            <h3 class="text-2xl font-bold text-white mb-2">{{ currentUser.name }}</h3>
+            <p class="text-slate-400 mb-2">{{ currentUser.email }}</p>
+            <span [ngClass]="'badge-' + currentUser.role" class="status-badge">
+              {{ currentUser.role }}
             </span>
           </div>
           <div *ngIf="isEditing()" class="text-slate-400 text-sm">
@@ -83,7 +83,7 @@
             (input)="updateFormField('name', $any($event.target).value)"
             class="field-input">
           <ng-template #nameDisplay>
-            <div class="form-display">{{ currentUser().name }}</div>
+            <div class="form-display">{{ currentUser.name }}</div>
           </ng-template>
         </div>
 
@@ -100,7 +100,7 @@
             (input)="updateFormField('email', $any($event.target).value)"
             class="field-input">
           <ng-template #emailDisplay>
-            <div class="form-display">{{ currentUser().email }}</div>
+            <div class="form-display">{{ currentUser.email }}</div>
           </ng-template>
         </div>
 
@@ -111,7 +111,7 @@
             Account Role
           </label>
           <div class="form-display-readonly">
-            <span class="capitalize">{{ currentUser().role }}</span>
+            <span class="capitalize">{{ currentUser.role }}</span>
             <span class="text-xs ml-2 text-slate-500">(Cannot be changed)</span>
           </div>
         </div>
@@ -138,13 +138,13 @@
         <div class="space-y-3">
           <div class="stat-row">
             <span class="stat-label">Status</span>
-            <span [ngClass]="currentUser().isActive ? 'available-badge' : 'sold-badge'" class="status-badge">
-              {{ currentUser().isActive ? 'Active' : 'Inactive' }}
+            <span [ngClass]="currentUser.isActive ? 'available-badge' : 'sold-badge'" class="status-badge">
+              {{ currentUser.isActive ? 'Active' : 'Inactive' }}
             </span>
           </div>
           <div class="stat-row">
             <span class="stat-label">Account Type</span>
-            <span class="stat-value capitalize text-2xl">{{ currentUser().role }}</span>
+            <span class="stat-value capitalize text-2xl">{{ currentUser.role }}</span>
           </div>
           <div class="stat-row">
             <span class="stat-label">Member Since</span>
