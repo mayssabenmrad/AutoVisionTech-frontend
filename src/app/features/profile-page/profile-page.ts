@@ -1,9 +1,10 @@
-import { Component, signal } from '@angular/core'; 
+import { Component, signal, SimpleChanges } from '@angular/core'; 
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { Hero } from '@shared/components/hero/hero';
-import { User } from 'src/app/core/models';
+import { UpdateProfileDto, User } from 'src/app/core/models';
 import { AuthService } from 'src/app/core/services/auth.service';
+import { UserService } from 'src/app/core/services/user.service';
 
 @Component({
   selector: 'app-profile-page',
@@ -25,15 +26,15 @@ export class ProfilePage {
   protected isEditing = signal(false);
   protected showPasswordModal = signal(false);
   protected showDeleteModal = signal(false);
+  protected isSaving = false;
+  protected saveError = '';
+  localUser!: User;
 
-  // -----------------------------
-  // SAFE INITIAL STATE (NO CRASH)
-  // -----------------------------
   protected formData = signal({
     name: '',
     email: '',
     image: null as File | null,
-    imagePreview: ''
+    imagePreview: '' as String | null
   });
 
   protected passwordForm = signal({
@@ -44,23 +45,42 @@ export class ProfilePage {
 
   protected deleteConfirmation = signal('');
 
-  constructor(private authService: AuthService) {}
+  constructor(private authService: AuthService,
+    private userService: UserService
+  ) {}
 
   ngOnInit() {
     this.authService.user$.subscribe((user) => {
       if (!user) return;
 
       this.currentUser = user;
-
+      this.localUser = { ...user };
       console.log('Parent received user:', user.id);
     });
   }
-
+  
   protected startEditing(): void {
-
+    this.isEditing.set(true);
+    if(this.currentUser){
+      this.formData.set({
+      name: this.currentUser.name,
+      email: this.currentUser.email,
+      image: null,
+      imagePreview: this.currentUser.image
+    });
   }
+}
 
   protected cancelEditing(): void {
+    this.isEditing.set(false);
+    if(this.currentUser){
+      this.formData.set({
+      name: this.currentUser.name,
+      email: this.currentUser.email,
+      image: null,
+      imagePreview: this.currentUser.image
+    });
+  }
   }
 
   protected onImageSelected(event: Event): void {
@@ -96,23 +116,39 @@ export class ProfilePage {
   }
 
   protected saveProfile(): void {
-    const data = this.formData();
+    const form = this.formData();
 
-    if (!data.name.trim()) {
+    if (!form.name.trim()) {
       alert('Name is required');
       return;
     }
 
-    if (!data.email.trim() || !data.email.includes('@')) {
+    if (!form.email.trim() || !form.email.includes('@')) {
       alert('Valid email is required');
       return;
     }
 
-    this.isEditing.set(false);
-    console.log('Profile updated:', data);
-    alert('Profile updated successfully!');
-  }
+    const data: UpdateProfileDto = {
+      name: form.name,
+      email: form.email
+    };
 
+    console.log("Saving profile with:", data);
+
+    this.isSaving = true;
+    this.userService.updateProfile(data).subscribe({
+      next: () => {
+        this.isSaving = false;
+        this.isEditing.set(false);
+        alert('Profile updated successfully!');
+      },
+      error: (err) => {
+        this.isSaving = false;
+        this.saveError = 'Failed to save changes';
+        console.error(err);
+      }
+    });
+  }
   protected openPasswordModal(): void {
     this.showPasswordModal.set(true);
     this.passwordForm.set({
