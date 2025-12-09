@@ -114,26 +114,27 @@ export class UserService {
       })
     );
   }
-  /**
- * Updates only the activation status of a user
- */
-updateActivateUser(userId: string, isActive: boolean) {
-  return this.http.patch<User>(
-    `${this.apiUrl}/isActive/${userId}`,
-    { isActive },
-    { withCredentials: true }
-  );
-}
 
-/**
- * Updates only the role of a user
- */
-updateUserRole(userId: string, role: 'admin' | 'agent') {
-  return this.http.patch<User>(
-    `${this.apiUrl}/role/${userId}`,
-    { role },
-    { withCredentials: true }
-  );
-}
+    /**
+   * Updates only the activation status of a user
+   */
+  updateActivateUser(userId: string, isActive: boolean) {
+    return this.http.patch<User>(
+      `${this.apiUrl}/isActive/${userId}`,
+      { isActive },
+      { withCredentials: true }
+    );
+  }
+
+  /**
+   * Updates only the role of a user
+   */
+  updateUserRole(userId: string, role: 'admin' | 'agent') {
+    return this.http.patch<User>(
+      `${this.apiUrl}/role/${userId}`,
+      { role },
+      { withCredentials: true }
+    );
+  }
 
 }
