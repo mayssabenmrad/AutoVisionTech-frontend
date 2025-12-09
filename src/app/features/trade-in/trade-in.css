@@ -1,0 +1,147 @@
+@tailwind utilities;
+@import "tailwindcss";
+
+.trade-in-page {
+  @apply min-h-screen;
+  background: linear-gradient(135deg, #0a0e17 0%, #1a1f2e 50%, #0a0e17 100%);
+}
+
+/* Section Title */
+.section-title {
+  @apply text-3xl font-bold text-white mb-8;
+  background: linear-gradient(to right, white, #bfdbfe, #a5f3fc);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+/* CTA Intro */
+.cta-card-intro {
+  @apply bg-slate-800/60 backdrop-blur-xl rounded-2xl p-12 border border-slate-700/50;
+  animation: fadeInUp 0.6s ease-out;
+}
+
+/* Trade-In Form */
+.trade-form-card {
+  @apply bg-slate-800/60 backdrop-blur-xl rounded-2xl p-8 border border-slate-700/50;
+  animation: slideDown 0.4s ease-out;
+}
+
+/* Process Timeline */
+.process-timeline {
+  @apply grid md:grid-cols-2 lg:grid-cols-4 gap-8 relative;
+}
+
+.process-step {
+  @apply relative;
+  animation: fadeInUp 0.6s ease-out both;
+}
+
+.process-step:nth-child(1) { animation-delay: 0.1s; }
+.process-step:nth-child(2) { animation-delay: 0.2s; }
+.process-step:nth-child(3) { animation-delay: 0.3s; }
+.process-step:nth-child(4) { animation-delay: 0.4s; }
+
+.step-connector {
+  @apply hidden lg:block absolute top-8 left-full w-full h-0.5;
+  @apply bg-gradient-to-r from-blue-600 to-cyan-600;
+  @apply -translate-x-1/2;
+  z-index: 0;
+}
+
+.step-circle {
+  @apply flex justify-center mb-4 relative z-10;
+}
+
+.step-number-wrapper {
+  @apply w-16 h-16 rounded-full flex items-center justify-center;
+  background: linear-gradient(135deg, #3b82f6, #06b6d4);
+  box-shadow: 0 0 30px rgba(37, 99, 235, 0.4);
+}
+
+.step-number {
+  @apply text-2xl font-bold text-white;
+}
+
+.step-content {
+  @apply text-center;
+}
+
+.step-icon-wrapper {
+  @apply w-12 h-12 rounded-xl flex items-center justify-center mx-auto mb-4;
+  @apply bg-slate-800/60 border border-slate-700;
+}
+
+.step-title {
+  @apply text-lg font-semibold text-white mb-2;
+}
+
+.step-description {
+  @apply text-sm text-slate-400;
+}
+
+/* Factors Section */
+.factors-card {
+  @apply bg-slate-800/60 backdrop-blur-xl rounded-2xl p-8 border border-slate-700/50;
+}
+
+.factor-item {
+  @apply flex items-center gap-3 p-4 rounded-xl;
+  @apply bg-slate-800/30 border border-slate-700/30;
+  @apply hover:border-blue-500/50 transition-all duration-300;
+}
+
+/* Tips Section */
+.tips-card {
+  @apply bg-slate-800/60 backdrop-blur-xl rounded-2xl p-8 border border-slate-700/50;
+}
+
+.tip-item {
+  @apply flex items-start gap-3 p-4 rounded-xl;
+  @apply bg-slate-800/30 border border-slate-700/30;
+}
+
+/* CTA Section */
+.cta-card {
+  @apply bg-slate-800/60 backdrop-blur-xl rounded-2xl p-12 border border-slate-700/50;
+}
+
+/* Animations */
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes slideDown {
+  from {
+    opacity: 0;
+    transform: translateY(-20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .section-title {
+    @apply text-2xl;
+  }
+
+  .trade-form-card,
+  .cta-card,
+  .cta-card-intro {
+    @apply p-6;
+  }
+
+  .step-connector {
+    @apply hidden;
+  }
+}

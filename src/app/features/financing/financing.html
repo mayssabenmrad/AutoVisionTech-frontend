@@ -1,0 +1,243 @@
+<div class="financing-page">
+  <!-- Hero Section -->
+  <app-hero 
+    [heroName]="'Flexible Financing Options'" 
+    [heroSubtitle]="'Drive Your Dream Car Today with Competitive Rates and Flexible Terms'" 
+    [heroIcon]="heroIcon">
+  </app-hero>
+
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 space-y-16">
+    
+    <!-- Payment Calculator Section -->
+    <section class="calculator-section">
+      <h2 class="section-title text-center mb-12">Finance Calculator</h2>
+      <div class="calculator-card">
+        <div class="grid lg:grid-cols-2 gap-8">
+          
+          <!-- Calculator Inputs -->
+          <div class="calculator-inputs space-y-6">
+            <h3 class="text-xl font-semibold text-white mb-6">Calculate Your Monthly Payment</h3>
+            
+            <!-- Vehicle Price -->
+            <div class="calc-input-group">
+              <label class="calc-label">Vehicle Price</label>
+              <div class="calc-input-wrapper">
+                <span class="calc-currency">$</span>
+                <input 
+                  type="number" 
+                  [value]="vehiclePrice()"
+                  (input)="vehiclePrice.set(+$any($event.target).value)"
+                  class="calc-input"
+                  min="0"
+                  step="1000"
+                />
+              </div>
+              <input 
+                type="range" 
+                [value]="vehiclePrice()"
+                (input)="vehiclePrice.set(+$any($event.target).value)"
+                min="10000" 
+                max="200000" 
+                step="1000"
+                class="calc-slider"
+              />
+            </div>
+
+            <!-- Down Payment -->
+            <div class="calc-input-group">
+              <label class="calc-label">Down Payment</label>
+              <div class="calc-input-wrapper">
+                <span class="calc-currency">$</span>
+                <input 
+                  type="number" 
+                  [value]="downPayment()"
+                  (input)="downPayment.set(+$any($event.target).value)"
+                  class="calc-input"
+                  min="0"
+                  step="500"
+                />
+              </div>
+              <input 
+                type="range" 
+                [value]="downPayment()"
+                (input)="downPayment.set(+$any($event.target).value)"
+                min="0" 
+                [max]="vehiclePrice()" 
+                step="500"
+                class="calc-slider"
+              />
+            </div>
+
+            <!-- Interest Rate -->
+            <div class="calc-input-group">
+              <label class="calc-label">Interest Rate (%)</label>
+              <div class="calc-input-wrapper">
+                <input 
+                  type="number" 
+                  [value]="interestRate()"
+                  (input)="interestRate.set(+$any($event.target).value)"
+                  class="calc-input"
+                  min="0"
+                  max="20"
+                  step="0.1"
+                />
+                <span class="calc-percent">%</span>
+              </div>
+              <input 
+                type="range" 
+                [value]="interestRate()"
+                (input)="interestRate.set(+$any($event.target).value)"
+                min="0" 
+                max="20" 
+                step="0.1"
+                class="calc-slider"
+              />
+            </div>
+
+            <!-- Loan Term -->
+            <div class="calc-input-group">
+              <label class="calc-label">Loan Term (months)</label>
+              <div class="calc-input-wrapper">
+                <input 
+                  type="number" 
+                  [value]="loanTerm()"
+                  (input)="loanTerm.set(+$any($event.target).value)"
+                  class="calc-input"
+                  min="12"
+                  max="84"
+                  step="12"
+                />
+              </div>
+              <input 
+                type="range" 
+                [value]="loanTerm()"
+                (input)="loanTerm.set(+$any($event.target).value)"
+                min="12" 
+                max="84" 
+                step="12"
+                class="calc-slider"
+              />
+            </div>
+          </div>
+
+          <!-- Calculator Results -->
+          <div class="calculator-results">
+            <h3 class="text-xl font-semibold text-white mb-6">Your Estimated Payments</h3>
+            
+            <div class="result-card monthly-payment">
+              <div class="result-label">Monthly Payment</div>
+              <div class="result-value">${{ monthlyPayment.toFixed(2) }}</div>
+              <div class="result-sublabel">{{ loanTerm() }} months</div>
+            </div>
+
+            <div class="results-grid">
+              <div class="result-item">
+                <div class="result-item-label">Total Loan Amount</div>
+                <div class="result-item-value">${{ (vehiclePrice() - downPayment()).toLocaleString('en-US', {minimumFractionDigits: 2}) }}</div>
+              </div>
+
+              <div class="result-item">
+                <div class="result-item-label">Down Payment</div>
+                <div class="result-item-value">${{ downPayment().toLocaleString('en-US', {minimumFractionDigits: 2}) }}</div>
+              </div>
+
+              <div class="result-item">
+                <div class="result-item-label">Total Interest</div>
+                <div class="result-item-value">${{ totalInterest.toLocaleString('en-US', {minimumFractionDigits: 2}) }}</div>
+              </div>
+
+              <div class="result-item">
+                <div class="result-item-label">Total Payment</div>
+                <div class="result-item-value">${{ totalPayment.toLocaleString('en-US', {minimumFractionDigits: 2}) }}</div>
+              </div>
+            </div>
+
+            <div class="disclaimer">
+              <svg class="w-5 h-5 text-yellow-400 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
+              </svg>
+              <p class="text-xs text-slate-400">This is an estimate only. Actual rates and terms may vary based on credit approval.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Financing Options Section -->
+    <section class="options-section">
+      <h2 class="section-title text-center mb-12">Choose Your Financing Option</h2>
+      <div class="grid lg:grid-cols-3 gap-8">
+        <div *ngFor="let option of financingOptions" class="option-card">
+          <div class="option-icon-wrapper">
+            <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" [attr.d]="option.icon"/>
+            </svg>
+          </div>
+          <h3 class="option-title">{{ option.title }}</h3>
+          <p class="option-description">{{ option.description }}</p>
+          <ul class="option-features">
+            <li *ngFor="let feature of option.features" class="option-feature">
+              <svg class="w-5 h-5 text-blue-400 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
+              </svg>
+              <span>{{ feature }}</span>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <!-- Benefits Section -->
+    <section class="benefits-section">
+      <h2 class="section-title text-center mb-12">Why Finance With Us?</h2>
+      <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
+        <app-info-card 
+          *ngFor="let benefit of benefits"
+          [icon]="benefit.icon"
+          [title]="benefit.title"
+          [description]="benefit.description">
+        </app-info-card>
+      </div>
+    </section>
+
+    <!-- Requirements Section -->
+    <section class="requirements-section">
+      <div class="requirements-card">
+        <h2 class="text-2xl font-bold text-white mb-8 text-center">What You'll Need</h2>
+        <div class="grid md:grid-cols-2 gap-4">
+          <div *ngFor="let requirement of requirements" class="requirement-item">
+            <svg class="w-5 h-5 text-green-400 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
+            </svg>
+            <span class="text-slate-300">{{ requirement }}</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- CTA Section -->
+    <section class="cta-section">
+      <div class="cta-card">
+        <h2 class="text-3xl font-bold text-white mb-4 text-center">Get Pre-Approved Today</h2>
+        <p class="text-slate-300 text-center mb-8 max-w-2xl mx-auto">
+          Start your financing application now and get approved in minutes. Our team is ready to help you drive away in your dream vehicle.
+        </p>
+        <div class="flex flex-col sm:flex-row gap-4 justify-center">
+          <button class="btn-active px-8 py-4">
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
+            </svg>
+            Apply Online
+          </button>
+          <button class="default-btn px-8 py-4">
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z"/>
+            </svg>
+            Call Us Now
+          </button>
+        </div>
+      </div>
+    </section>
+
+  </div>
+</div>

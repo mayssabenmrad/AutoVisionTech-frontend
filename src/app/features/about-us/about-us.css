@@ -1,0 +1,103 @@
+@tailwind utilities;
+@import "tailwindcss";
+
+.about-page {
+  @apply min-h-screen;
+  background: linear-gradient(135deg, #0a0e17 0%, #1a1f2e 50%, #0a0e17 100%);
+}
+
+/* Section Title */
+.section-title {
+  @apply text-3xl font-bold text-white mb-8;
+  background: linear-gradient(to right, white, #bfdbfe, #a5f3fc);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+/* Story Section */
+.story-content {
+  animation: slideInLeft 0.6s ease-out;
+}
+
+.story-image {
+  @apply relative overflow-hidden rounded-2xl;
+  animation: slideInRight 0.6s ease-out;
+}
+
+.story-image::before {
+  content: '';
+  @apply absolute inset-0 bg-gradient-to-br from-blue-600/20 to-cyan-600/20;
+  @apply pointer-events-none z-10;
+}
+
+/* Stats Section */
+.stat-icon-wrapper {
+  @apply w-16 h-16 rounded-full flex items-center justify-center;
+  background: linear-gradient(135deg, #3b82f6, #06b6d4);
+  box-shadow: 0 0 30px rgba(37, 99, 235, 0.4);
+}
+
+/* Mission & Vision Section */
+.mission-card,
+.vision-card {
+  @apply bg-slate-800/60 backdrop-blur-xl rounded-2xl p-8 border border-slate-700/50;
+  @apply hover:border-blue-500/50 transition-all duration-300;
+}
+
+.card-icon-wrapper {
+  @apply w-16 h-16 rounded-full flex items-center justify-center;
+  background: linear-gradient(135deg, #3b82f6, #06b6d4);
+  box-shadow: 0 0 30px rgba(37, 99, 235, 0.4);
+}
+
+/* Team Section */
+.team-card {
+  @apply bg-slate-800/60 backdrop-blur-xl rounded-2xl overflow-hidden border border-slate-700/50;
+  @apply hover:border-blue-500/50 transition-all duration-300;
+  @apply hover:transform hover:-translate-y-2;
+}
+
+.team-card:hover {
+  @apply scale-102;
+}
+
+/* CTA Section */
+.cta-content {
+  @apply bg-slate-800/60 backdrop-blur-xl rounded-2xl p-12 border border-slate-700/50;
+  @apply text-center;
+}
+
+/* Animations */
+@keyframes slideInLeft {
+  from {
+    opacity: 0;
+    transform: translateX(-30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes slideInRight {
+  from {
+    opacity: 0;
+    transform: translateX(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .section-title {
+    @apply text-2xl;
+  }
+
+  .cta-content {
+    @apply p-6;
+  }
+}
