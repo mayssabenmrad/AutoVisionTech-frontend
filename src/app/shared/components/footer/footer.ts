@@ -1,10 +1,10 @@
 import { Component, Output, EventEmitter } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { Router } from '@angular/router';
 
 interface FooterLink {
   label: string;
-  action?: string;
-  href?: string;
+  action: string;
 }
 
 interface ContactItem {
@@ -25,6 +25,8 @@ interface ContactItem {
 export class Footer {
   @Output() navigate = new EventEmitter<string>();
 
+  constructor(private router: Router) {}
+
   protected readonly currentYear = new Date().getFullYear();
 
   // Social Media Links
@@ -37,20 +39,20 @@ export class Footer {
 
   // Footer Links
   protected readonly quickLinks: FooterLink[] = [
-    { label: 'Car Catalog', action: 'catalogue' },
-    { label: 'About Us', href: '#about' },
-    { label: 'Services', href: '#services' },
-    { label: 'Financing', href: '#financing' },
-    { label: 'Trade-In', href: '#trade-in' }
+    { label: 'Car Catalog', action: '/' },
+    { label: 'About Us', action: '/about-us' },
+    { label: 'Services', action: '/services' },
+    { label: 'Financing', action: '/financing' },
+    { label: 'Trade-In', action: '/trade-in' }
   ];
 
   // Support Links
   protected readonly supportLinks: FooterLink[] = [
-    { label: 'FAQ', href: '#faq' },
-    { label: 'Contact Us', href: '#contact' },
-    { label: 'Privacy Policy', href: '#privacy' },
-    { label: 'Terms of Service', href: '#terms' },
-    { label: 'Warranty', href: '#warranty' }
+    { label: 'FAQ', action: '/faq' },
+    { label: 'Contact Us', action: '/contact' },
+    { label: 'Privacy Policy', action: '/privacy' },
+    { label: 'Terms of Service', action: '/terms' },
+    { label: 'Warranty', action: '/warranty' }
   ];
 
   // Contact Information
@@ -88,7 +90,7 @@ export class Footer {
 
   // Navigation Handler
   protected onNavigate(page: string): void {
-    this.navigate.emit(page);
+    this.router.navigate([page]);
   }
 
   // SVG Icon Getters

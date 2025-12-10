@@ -63,17 +63,11 @@
         <ul class="space-y-3">
           <li *ngFor="let link of quickLinks">
             <button
-              *ngIf="link.action; else externalLink"
               (click)="onNavigate(link.action)"
               class="footer-link"
             >
               {{ link.label }}
             </button>
-            <ng-template #externalLink>
-              <a [href]="link.href" class="footer-link">
-                {{ link.label }}
-              </a>
-            </ng-template>
           </li>
         </ul>
       </div>
@@ -83,9 +77,9 @@
         <h4 class="footer-heading">Support</h4>
         <ul class="space-y-3">
           <li *ngFor="let link of supportLinks">
-            <a [href]="link.href" class="footer-link">
+            <button (click)="onNavigate(link.action)" class="footer-link">
               {{ link.label }}
-            </a>
+            </button>
           </li>
         </ul>
       </div>
