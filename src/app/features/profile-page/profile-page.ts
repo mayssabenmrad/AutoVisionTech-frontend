@@ -1,18 +1,10 @@
-import { Component, signal } from '@angular/core';
+import { Component, signal, SimpleChanges } from '@angular/core'; 
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { Hero } from '@shared/components/hero/hero';
-
-interface User {
-  id: string;
-  name: string;
-  email: string;
-  role: 'admin' | 'agent' | 'client';
-  image: File | null;
-  imagePreview: string;
-  isActive: boolean;
-  joinedDate: string;
-}
+import { UpdateProfileDto, User } from 'src/app/core/models';
+import { AuthService } from 'src/app/core/services/auth.service';
+import { UserService } from 'src/app/core/services/user.service';
 
 @Component({
   selector: 'app-profile-page',
@@ -22,83 +14,90 @@ interface User {
   styleUrls: ['./profile-page.css']
 })
 export class ProfilePage {
+  
   protected heroIcon = `
     <svg xmlns="http://www.w3.org/2000/svg" class="brand-icon w-15 h-15" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
       <path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/>
     </svg>
-    `;
+  `;
 
-  protected readonly currentUser = signal<User>({
-    id: '1',
-    name: 'Jean Dupont',
-    email: 'jean.dupont@autovision.com',
-    role: 'agent',
-    image: null,
-    imagePreview: 'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=400&h=400&fit=crop',
-    isActive: true,
-    joinedDate: '2024-01-15'
-  });
+  currentUser: User | null = null;
 
   protected isEditing = signal(false);
   protected showPasswordModal = signal(false);
   protected showDeleteModal = signal(false);
+  protected isSaving = false;
+  protected saveError = '';
+  localUser!: User;
 
-  // Form data
   protected formData = signal({
-    name: this.currentUser().name,
-    email: this.currentUser().email,
+    name: '',
+    email: '',
     image: null as File | null,
-    imagePreview: this.currentUser().imagePreview
+    imagePreview: '' as String | null
   });
 
-  // Password form
   protected passwordForm = signal({
     currentPassword: '',
     newPassword: '',
     confirmPassword: ''
   });
 
-  // Delete confirmation
   protected deleteConfirmation = signal('');
 
-  protected startEditing(): void {
-    this.isEditing.set(true);
-    this.formData.set({
-      name: this.currentUser().name,
-      email: this.currentUser().email,
-      image: null,
-      imagePreview: this.currentUser().imagePreview
+  constructor(private authService: AuthService,
+    private userService: UserService
+  ) {}
+
+  ngOnInit() {
+    this.authService.user$.subscribe((user) => {
+      if (!user) return;
+
+      this.currentUser = user;
+      this.localUser = { ...user };
+      console.log('Parent received user:', user.id);
     });
   }
 
+  protected startEditing(): void {
+    this.isEditing.set(true);
+    if(this.currentUser){
+      this.formData.set({
+      name: this.currentUser.name,
+      email: this.currentUser.email,
+      image: null,
+      imagePreview: this.currentUser.image
+    });
+  }
+}
+
   protected cancelEditing(): void {
     this.isEditing.set(false);
-    this.formData.set({
-      name: this.currentUser().name,
-      email: this.currentUser().email,
+    if(this.currentUser){
+      this.formData.set({
+      name: this.currentUser.name,
+      email: this.currentUser.email,
       image: null,
-      imagePreview: this.currentUser().imagePreview
+      imagePreview: this.currentUser.image
     });
+  }
   }
 
   protected onImageSelected(event: Event): void {
     const input = event.target as HTMLInputElement;
     if (input.files && input.files[0]) {
       const file = input.files[0];
-      
-      // Validate file type
+
       if (!file.type.startsWith('image/')) {
         alert('Please select an image file');
         return;
       }
 
-      // Validate file size (max 5MB)
       if (file.size > 5 * 1024 * 1024) {
         alert('Image size must be less than 5MB');
         return;
       }
 
-      // Create preview
       const reader = new FileReader();
       reader.onload = (e) => {
         this.formData.update(data => ({
@@ -116,32 +115,64 @@ export class ProfilePage {
     input?.click();
   }
 
-  protected saveProfile(): void {
-    const data = this.formData();
-    
-    if (!data.name.trim()) {
-      alert('Name is required');
-      return;
-    }
-
-    if (!data.email.trim() || !data.email.includes('@')) {
-      alert('Valid email is required');
-      return;
-    }
-
-    // Update user
-    this.currentUser.update(user => ({
-      ...user,
-      name: data.name,
-      email: data.email,
-      image: data.image,
-      imagePreview: data.imagePreview
-    }));
-
-    this.isEditing.set(false);
-    console.log('Profile updated:', data);
-    alert('Profile updated successfully!');
+protected saveProfile(): void {
+  const form = this.formData();
+  
+  if (!form.name.trim()) {
+    alert('Name is required');
+    return;
   }
+
+  if (!form.email.trim() || !form.email.includes('@')) {
+    alert('Valid email is required');
+    return;
+  }
+
+  this.isSaving = true;
+  this.saveError = '';
+
+  const data: UpdateProfileDto = {
+    name: form.name,
+    email: form.email
+  };
+
+  //update profile
+  this.userService.updateProfile(data).subscribe({
+    next: (updatedUser) => {
+      console.log('Profile basic data updated', updatedUser);
+
+      //check if the profile pic got updated
+      if (form.image) {
+        this.userService.updateProfileImage(form.image).subscribe({
+          next: (response) => {
+            this.isSaving = false;
+            this.isEditing.set(false);
+
+            alert('Profile and photo updated successfully!');
+          },
+          error: (err) => {
+            this.isSaving = false;
+            this.saveError = 'Photo upload failed.';
+            console.error(err);
+          }
+        });
+
+      } else {
+        // No image to update
+        this.isSaving = false;
+        this.isEditing.set(false);
+
+        alert('Profile updated successfully!');
+      }
+    },
+
+    error: (err) => {
+      this.isSaving = false;
+      this.saveError = 'Failed to save profile information.';
+      console.error(err);
+    }
+  });
+}
 
   protected openPasswordModal(): void {
     this.showPasswordModal.set(true);
@@ -174,9 +205,22 @@ export class ProfilePage {
       return;
     }
 
-    console.log('Password changed successfully');
-    this.closePasswordModal();
-    alert('Password changed successfully!');
+        // API Call to change password
+    this.userService
+      .changePassword({
+        currentPassword: form.currentPassword,
+        newPassword: form.newPassword,
+      })
+      .subscribe({
+        next: () => {
+          console.log('Password changed successfully');
+          alert('Password changed successfully!');
+          this.closePasswordModal();
+        },
+        error: (err) => {
+          alert('Failed to update password');
+        },
+      });
   }
 
   protected openDeleteModal(): void {
@@ -193,9 +237,19 @@ export class ProfilePage {
       alert('Please type DELETE to confirm');
       return;
     }
-
-    console.log('Account deleted');
-    alert('Account deleted successfully!');
+    else{
+      this.userService.deleteMyProfile().subscribe({
+      next: () => {
+        console.log('Account deleted');
+        alert('Account deleted successfully!');
+        window.location.href = '/';
+      },
+      error: (err) => {
+        console.error('Failed to delete profile:', err);
+        alert('Failed to delete profile. Please try again.');
+      },
+    });
+    }
     this.closeDeleteModal();
   }
 
@@ -208,8 +262,8 @@ export class ProfilePage {
   }
 
   protected getJoinedDate(): string {
-    const date = new Date(this.currentUser().joinedDate);
-    return date.toLocaleDateString('en-US', { 
+    if (!this.currentUser) return '';
+    return new Date(this.currentUser.createdAt).toLocaleDateString('en-US', { 
       year: 'numeric', 
       month: 'long', 
       day: 'numeric' 
