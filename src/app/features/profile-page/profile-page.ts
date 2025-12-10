@@ -237,9 +237,19 @@ protected saveProfile(): void {
       alert('Please type DELETE to confirm');
       return;
     }
-
-    console.log('Account deleted');
-    alert('Account deleted successfully!');
+    else{
+      this.userService.deleteMyProfile().subscribe({
+      next: () => {
+        console.log('Account deleted');
+        alert('Account deleted successfully!');
+        window.location.href = '/';
+      },
+      error: (err) => {
+        console.error('Failed to delete profile:', err);
+        alert('Failed to delete profile. Please try again.');
+      },
+    });
+    }
     this.closeDeleteModal();
   }
 
