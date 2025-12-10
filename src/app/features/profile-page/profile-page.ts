@@ -58,7 +58,7 @@ export class ProfilePage {
       console.log('Parent received user:', user.id);
     });
   }
-  
+
   protected startEditing(): void {
     this.isEditing.set(true);
     if(this.currentUser){
@@ -115,40 +115,66 @@ export class ProfilePage {
     input?.click();
   }
 
-  protected saveProfile(): void {
-    const form = this.formData();
+protected saveProfile(): void {
+  const form = this.formData();
 
-    if (!form.name.trim()) {
-      alert('Name is required');
-      return;
-    }
+  // --- VALIDATION ---
+  if (!form.name.trim()) {
+    alert('Name is required');
+    return;
+  }
 
-    if (!form.email.trim() || !form.email.includes('@')) {
-      alert('Valid email is required');
-      return;
-    }
+  if (!form.email.trim() || !form.email.includes('@')) {
+    alert('Valid email is required');
+    return;
+  }
 
-    const data: UpdateProfileDto = {
-      name: form.name,
-      email: form.email
-    };
+  this.isSaving = true;
+  this.saveError = '';
 
-    console.log("Saving profile with:", data);
+  const data: UpdateProfileDto = {
+    name: form.name,
+    email: form.email
+  };
 
-    this.isSaving = true;
-    this.userService.updateProfile(data).subscribe({
-      next: () => {
+  //update profile
+  this.userService.updateProfile(data).subscribe({
+    next: (updatedUser) => {
+      console.log('Profile basic data updated', updatedUser);
+
+      //check if the profile pic got updated
+      if (form.image) {
+        this.userService.updateProfileImage(form.image).subscribe({
+          next: (response) => {
+            this.isSaving = false;
+            this.isEditing.set(false);
+
+            alert('Profile and photo updated successfully!');
+          },
+          error: (err) => {
+            this.isSaving = false;
+            this.saveError = 'Photo upload failed.';
+            console.error(err);
+          }
+        });
+
+      } else {
+        // No image to update
         this.isSaving = false;
         this.isEditing.set(false);
+
         alert('Profile updated successfully!');
-      },
-      error: (err) => {
-        this.isSaving = false;
-        this.saveError = 'Failed to save changes';
-        console.error(err);
       }
-    });
-  }
+    },
+
+    error: (err) => {
+      this.isSaving = false;
+      this.saveError = 'Failed to save profile information.';
+      console.error(err);
+    }
+  });
+}
+
   protected openPasswordModal(): void {
     this.showPasswordModal.set(true);
     this.passwordForm.set({
